@@ -1,0 +1,36 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 390px;
+  max-height: 844px;
+  overflow: hidden; /* 앱 전체 스크롤 방지 (콘텐츠는 app-content 내에서 스크롤) */
+  background-color: var(--shell-bg);
+  box-shadow: none;
+  border-radius: 32px;
+  border: 3px solid rgba(0, 0, 0, 1.0);
+  box-sizing: border-box;
+}
+
+.app-content {
+  flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+  min-height: 0;
+  /* react-slick이 flex 아이템일 때 높이를 제대로 계산하지 못하는 문제를 해결합니다. */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 0; /* flex 아이템의 크기가 콘텐츠보다 작아질 수 있도록 허용 */
+}
+
+.app-shell-bottom {
+  flex-shrink: 0; /* 하단 네비게이션이 줄어들지 않도록 고정 */
+}
+
+.app-content .slick-slider,
+.app-content .slick-list,
+.app-content .slick-track,
+.app-content .slick-slide > div {
+  height: 100%;
+}
