@@ -1,0 +1,3 @@
+<div style={{width: '100%', height: '100%', paddingLeft: 16, paddingRight: 16, paddingTop: 8, paddingBottom: 8, background: '#FCA5A5', borderRadius: 6, outline: '1px #7F1D1D solid', outlineOffset: '-1px', justifyContent: 'center', alignItems: 'center', gap: 4, display: 'inline-flex'}}>
+    <div style={{flex: '1 1 0', color: '#7F1D1D', fontSize: 14, fontFamily: 'Pretendard', fontWeight: '500', wordWrap: 'break-word'}}>Button</div>
+</div>

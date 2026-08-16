@@ -1,0 +1,33 @@
+.input {
+  align-items: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+  left: 164px;
+  position: relative;
+}
+
+.input .password-input {
+  color: #1f2937;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-top: -1px;
+  position: relative;
+  width: fit-content;
+}
+
+.input .input-box {
+  align-self: stretch;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #d1d5db;
+  border-radius: 4px;
+  height: 38px;
+  min-width: 140px;
+  position: relative;
+  width: 100%;
+}

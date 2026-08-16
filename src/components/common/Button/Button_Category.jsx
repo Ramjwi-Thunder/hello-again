@@ -1,0 +1,3 @@
+<div data-variant="chip" style={{width: '100%', height: '100%', paddingLeft: 12, paddingRight: 12, paddingTop: 6, paddingBottom: 6, background: '#F3F4F6', borderRadius: 8, justifyContent: 'center', alignItems: 'center', gap: 4, display: 'inline-flex'}}>
+    <div style={{flex: '1 1 0', color: '#949494', fontSize: 14, fontFamily: 'Pretendard-Medium', fontWeight: '400', wordWrap: 'break-word'}}>Button</div>
+</div>
