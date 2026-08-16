@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import mobileSignal from '../../assets/images/Mobile-Signal.svg';
-import wifi from '../../assets/images/Wifi.svg';
-import battery from '../../assets/images/StatusBar-battery.svg';
+import mobileSignal from '../../assets/images/StatusBar/Mobile-Signal.svg';
+import wifi from '../../assets/images/StatusBar/Wifi.svg';
+import battery from '../../assets/images/StatusBar/StatusBar-battery.svg';
 
 const statusBarStyle = {
   width: '100%',

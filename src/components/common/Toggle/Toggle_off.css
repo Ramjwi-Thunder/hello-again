@@ -1,0 +1,39 @@
+.input {
+  align-items: center;
+  display: inline-flex;
+  justify-content: space-between;
+  left: 848px;
+  position: relative;
+}
+
+.input .toggle-input {
+  color: #1f2937;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  width: fit-content;
+}
+
+.input .toggle {
+  align-items: center;
+  background-color: #d1d5db;
+  border-radius: 999px;
+  display: flex;
+  height: 20px;
+  margin-left: -1px;
+  overflow: hidden;
+  padding: 2px;
+  position: relative;
+  width: 36px;
+}
+
+.input .ellipse {
+  background-color: #ffffff;
+  border-radius: 8px;
+  height: 16px;
+  position: relative;
+  width: 16px;
+}

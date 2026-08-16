@@ -1,0 +1,63 @@
+.input {
+  align-items: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+  left: 492px;
+  position: relative;
+}
+
+.input .select-input-text {
+  color: #1f2937;
+  font-family: "Pretendard-Medium", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-top: -1px;
+  position: relative;
+  width: fit-content;
+}
+
+.input .select-box {
+  align-items: center;
+  align-self: stretch;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  height: 38px;
+  justify-content: space-between;
+  min-width: 140px;
+  overflow: hidden;
+  padding: 8px 12px;
+  position: relative;
+  width: 100%;
+}
+
+.input .select-input-label {
+  color: #9ca3af;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  width: fit-content;
+}
+
+.input .chevron {
+  height: 12px;
+  position: relative;
+  width: 12px;
+}
+
+.input .vector {
+  height: 68.75%;
+  left: 18.75%;
+  position: absolute;
+  top: 31.25%;
+  width: 81.25%;
+}
