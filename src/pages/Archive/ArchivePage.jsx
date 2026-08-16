@@ -1,7 +1,30 @@
 import React from 'react';
 import './Archive.css';
+import { supabase } from '../../lib/supabase';
 
 function ArchivePage() {
+const [archives, setArchives] = React.useState([]);
+const [loading, setLoading] = React.useState(true);
+
+React.useEffect(() => {
+  const fetchArchives = async () => {
+    const { data, error } = await supabase
+      .from('archives')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('자료 불러오기 실패:', error);
+      return;
+    }
+
+    setArchives(data || []);
+    setLoading(false);
+  };
+
+  fetchArchives();
+}, []);
+
   const tags = ['전체', '사진', '영상', '음성', '텍스트'];
   const [activeTag, setActiveTag] = React.useState('전체');
   const [searchTerm, setSearchTerm] = React.useState('');
