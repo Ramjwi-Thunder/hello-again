@@ -14,7 +14,7 @@ function AppShell({
   showTopBar = true,
   isSplash = false,
 }) {
-  const shellClassName = `app-shell${activeTab === 'home' ? ' app-shell-home' : ''}${isSplash ? ' app-shell-splash' : ''}`;
+const shellClassName = `app-shell${activeTab === 'home' ? ' app-shell-home' : ''}${activeTab === 'archive' ? ' app-shell--archive' : ''}${isSplash ? ' app-shell-splash' : ''}`;
 
   return (
     <div className={shellClassName}>

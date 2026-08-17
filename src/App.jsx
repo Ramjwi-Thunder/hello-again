@@ -25,40 +25,54 @@ const pages = [
 const SHOW_SPLASH = true; // 스플래시 화면을 보려면 true로 설정
 
 function App() {
-  const [currentView, setCurrentView] = useState(SHOW_SPLASH ? 'splash' : 'home');
+  // 1. 모든 상태 선언 (최상단)
+  const [activeTab, setActiveTab] = useState(SHOW_SPLASH ? 'splash' : 'home');
+  const [isArchiveUploading, setIsArchiveUploading] = useState(false);
 
-  const activeTab = currentView;
-  const setActiveTab = (tab) => {
-    setCurrentView(tab);
+  // 2. 핸들러 함수 정의
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setIsArchiveUploading(false);
   };
 
-  if (currentView === 'splash') {
+  const handleNavigation = (targetView) => {
+    if (activeTab === 'home') {
+      handleTabChange(targetView);
+    }
+  };
+
+  // 3. 스플래시 화면 분기 (훅 선언 이후에 배치)
+  if (activeTab === 'splash') {
     return (
       <AppShell showTopBar={false} bottomNav={false} isSplash>
-        <SplashPage onComplete={() => setCurrentView('home')} />
+        <SplashPage onComplete={() => setActiveTab('home')} />
       </AppShell>
     );
   }
 
+  // 4. 일반 페이지 및 업로드 상태 계산
   const currentPage = pages.find((page) => page.key === activeTab) ?? pages[0];
   const PageComponent = currentPage.component;
 
-  const handleNavigation = (targetView) => {
-    if (activeTab === 'home') {
-      setActiveTab(targetView);
-    }
-  };
+  const isUploading = activeTab === 'archive' && isArchiveUploading;
+  const pageTitle = isUploading ? '업로드' : currentPage.title;
+  const showBottomNav = !isUploading;
+  const handleBackClick = isUploading ? () => setIsArchiveUploading(false) : undefined;
 
   return (
     <AppShell
-      title={currentPage.title}
+      title={pageTitle}
       activeTab={activeTab}
-      onTabChange={setActiveTab}
+      onTabChange={handleTabChange}
       showTopBar={currentPage.showTopBar}
+      bottomNav={showBottomNav}
+      onBackClick={handleBackClick}
     >
       <div style={{ height: '100%', overflow: 'auto' }}>
         <PageComponent
           title={currentPage.title}
+          isUploading={isArchiveUploading}
+          setIsUploading={setIsArchiveUploading}
           onStartChat={() => handleNavigation('chat')}
           onOpenArchive={() => handleNavigation('archive')}
           onGoToSettings={() => handleNavigation('settings')}
