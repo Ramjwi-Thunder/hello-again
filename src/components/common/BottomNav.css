@@ -8,6 +8,7 @@
 
 .bottom-nav-rail {
   width: 100%;
+  bottom: -8px;
   height: 66px;
   -webkit-backdrop-filter: blur(2px) brightness(100.0%) saturate(100.0%);
   backdrop-filter: blur(2px) brightness(100.0%) saturate(100.0%);
