@@ -54,33 +54,156 @@ function ArchiveUpload({ onCancel, onSuccess }) {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
-    if (selectedFiles.length === 0) {
-      alert('업로드할 파일을 선택해주세요.');
-      return;
-    }
+const handleSubmit = async () => {
+  if (selectedFiles.length === 0) {
+    alert('업로드할 파일을 선택해주세요.');
+    return;
+  }
 
-    setSubmitting(true);
-    try {
-      const records = selectedFiles.map((file) => ({
-        name: file.name,
-        type: getCategory(file),
-        created_at: new Date().toISOString(),
-      }));
+  setSubmitting(true);
 
-      const { error } = await supabase.from('archives').insert(records);
+  try {
+    // ① 현재 로그인 세션 확인
+    let {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    // 로그인되어 있지 않으면 익명 로그인
+    if (!session) {
+      const { data, error } = await supabase.auth.signInAnonymously();
+
       if (error) {
-        console.error('Supabase 저장 중 오류:', error);
+        console.error('익명 로그인 실패:', error);
+        throw error;
       }
-    } catch (err) {
-      console.error('업로드 예외:', err);
-    } finally {
-      setSubmitting(false);
-      if (onSuccess) {
-        onSuccess();
-      }
+
+      session = data.session;
+      console.log('익명 로그인 성공:', data.user.id);
     }
-  };
+
+    // ② 현재 사용자 확인
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error('로그인한 사용자를 찾을 수 없습니다.');
+    }
+
+    console.log('현재 사용자:', user.id);
+
+    // ③ profiles에 사용자 정보가 없으면 생성
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .upsert(
+        {
+          id: user.id,
+          name: '익명 사용자',
+        },
+        {
+          onConflict: 'id',
+        }
+      );
+
+    if (profileError) {
+      console.error('profiles 생성 실패:', profileError);
+      throw profileError;
+    }
+
+    // ④ memorial 생성
+    const { data: memorial, error: memorialError } = await supabase
+      .from('memorials')
+      .insert({
+        user_id: user.id,
+        name: '고인',
+        status: 'active',
+      })
+      .select()
+      .single();
+
+    if (memorialError) {
+      console.error('memorial 생성 실패:', memorialError);
+      throw memorialError;
+    }
+
+    console.log('memorial 생성 성공:', memorial.id);
+
+    // ⑤ archive 생성
+    const { data: archive, error: archiveError } = await supabase
+      .from('archives')
+      .insert({
+        memorial_id: memorial.id,
+        title: '기억 보관함',
+        description: '고인의 소중한 기억을 보관합니다.',
+      })
+      .select()
+      .single();
+
+    if (archiveError) {
+      console.error('archive 생성 실패:', archiveError);
+      throw archiveError;
+    }
+
+    console.log('archive 생성 성공:', archive.id);
+
+    // ⑥ 파일 업로드 + memories 저장
+    for (const file of selectedFiles) {
+      const fileExtension = file.name.split('.').pop();
+
+      const filePath = `${user.id}/${Date.now()}-${crypto.randomUUID()}.${fileExtension}`;
+
+      // Storage 업로드
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('archive-files')
+        .upload(filePath, file, {
+          contentType: file.type,
+          upsert: false,
+        });
+
+      if (uploadError) {
+        console.error('Storage 업로드 실패:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('파일 업로드 성공:', uploadData.path);
+
+      // memories에 파일 정보 저장
+      const { data: memory, error: memoryError } = await supabase
+        .from('memories')
+        .insert({
+          archive_id: archive.id,
+          type: getCategory(file),
+          title: file.name,
+          content: null,
+          file_path: filePath,
+          file_name: file.name,
+          mime_type: file.type,
+          created_by: user.id,
+        })
+        .select()
+        .single();
+
+      if (memoryError) {
+        console.error('memories 저장 실패:', memoryError);
+        throw memoryError;
+      }
+
+      console.log('memory 저장 성공:', memory);
+    }
+
+    alert('파일 업로드가 완료되었습니다.');
+
+    if (onSuccess) {
+      onSuccess();
+    }
+  } catch (err) {
+    console.error('업로드 중 오류:', err);
+    alert(`파일 업로드에 실패했습니다.\n${err.message || ''}`);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="archive-upload-container">
