@@ -42,11 +42,6 @@ React.useEffect(() => {
         overflow: 'hidden',
       }}
     >
-      {/* Title */}
-      <h1 style={{ margin: '0 0 20px 0', fontSize: '23px', fontWeight: 700, color: '#111827', textAlign: 'left' }}>
-        기억 보관함
-      </h1>
-
       {/* Search Bar */}
       <div
         style={{

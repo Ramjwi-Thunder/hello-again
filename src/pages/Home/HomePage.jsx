@@ -1,7 +1,10 @@
 import './HomePage.css';
 import galleryIcon from '../../assets/images/gallery.svg';
 import memoryIcon from '../../assets/images/memory.svg'; // 아이콘 경로가 다를 경우 수정해주세요.
+import Notification from '../../components/home/notification';
 
+import rollingGrape from '../../assets/images/rolling_grape.svg';
+import chevronSmall from '../../assets/images/chevron_small.svg';
 const quickPromptText = '오늘의 감정이나 기억을\n자유롭게 남겨보세요';
 
 function StartChatButton({ onStartChat }) {
@@ -12,13 +15,25 @@ function StartChatButton({ onStartChat }) {
   );
 }
 
-function JourneyProgressCard() {
+function JourneyProgressCard({ onGoToSettings }) {
   const journeyDays = 8; {/*추후 수정하기*/}
   const totalDays = 30; {/*추후 수정하기*/}
   const progressPercent = Math.round((journeyDays / totalDays) * 100);
 
   return (
-    <section className="homepage_progress-card" aria-label="기억의 여정 진행률">
+    <section
+      className="homepage_progress-card"
+      aria-label="기억의 여정 진행률"
+      onClick={onGoToSettings}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onGoToSettings?.();
+        }
+      }}
+    >
       <div className="homepage_progress-title-row">
         <h2 className="homepage_progress-title">기억의 여정 진행률</h2>
         <div className="homepage_progress-percent">{progressPercent}%</div>
@@ -37,17 +52,26 @@ function JourneyProgressCard() {
         <span>진행 기간</span> {/*추후 수정하기*/}
         <span className="homepage_progress-period-value">
           2026.08.07. - 2026.09.06.
-          <span className="homepage_progress-chevron" aria-hidden="true" />
+          <img src={chevronSmall} alt="" className="homepage_progress-chevron" aria-hidden="true" />
         </span>
       </button>
     </section>
   );
 }
 
-function MemoryPromptCard() {
+function MemoryPromptCard({ onGoToHistory }) {
   return (
     <article
       className="homepage_memory-card homepage_memory-card--prompt"
+      onClick={onGoToHistory}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onGoToHistory?.();
+        }
+      }}
       aria-label="새로운 기억 남기기"
     >
       <p className="homepage_memory-card-text">{quickPromptText}</p>
@@ -56,9 +80,21 @@ function MemoryPromptCard() {
   );
 }
 
-function MemoryStoryCard() {
+function MemoryStoryCard({ onOpenArchive }) {
   return (
-    <article className="homepage_memory-card homepage_memory-card--story">
+    <article
+      className="homepage_memory-card homepage_memory-card--story"
+      onClick={onOpenArchive}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onOpenArchive?.();
+        }
+      }}
+      aria-label="기억 보러가기"
+    >
       <p className="homepage_memory-card-text homepage_memory-card-text--story">
         2018.08.16.
         {'\n'}
@@ -81,6 +117,10 @@ function HomeHero() {
         
       </div>
 
+      <div className="homepage_notification-wrap">
+        <Notification unreadCount={1} />
+      </div>
+
       <div className="homepage_profile-badge" aria-hidden="true">
         <span className="homepage_profile-dot" />
       </div>
@@ -88,22 +128,21 @@ function HomeHero() {
   );
 }
 
-function HomePage({ onStartChat }) {
+function HomePage({ onStartChat, onOpenArchive, onGoToHistory, onGoToSettings }) {
   return (
     <main className="homepage">
       <HomeHero />
-      <div className="homepage_glow" aria-hidden="true" />
-      <div className="homepage_glow homepage_glow--small" aria-hidden="true" />
+      <img src={rollingGrape} alt="" className="homepage_background-grape" aria-hidden="true" />
 
       <div className="homepage_cta-wrap">
         <StartChatButton onStartChat={onStartChat} />
       </div>
 
-      <JourneyProgressCard />
+      <JourneyProgressCard onGoToSettings={onGoToSettings} />
 
       <section className="homepage_memory-grid" aria-label="기억 카드">
-        <MemoryPromptCard />
-        <MemoryStoryCard />
+        <MemoryPromptCard onGoToHistory={onGoToHistory} />
+        <MemoryStoryCard onOpenArchive={onOpenArchive} />
       </section>
     </main>
   );
