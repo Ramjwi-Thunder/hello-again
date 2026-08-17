@@ -23,19 +23,35 @@ const pages = [
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
+  const [isArchiveUploading, setIsArchiveUploading] = useState(false);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setIsArchiveUploading(false);
+  };
+
   const currentPage = pages.find((page) => page.key === activeTab) ?? pages[0];
   const PageComponent = currentPage.component;
 
+  const isUploading = activeTab === 'archive' && isArchiveUploading;
+  const pageTitle = isUploading ? '업로드' : currentPage.title;
+  const showBottomNav = !isUploading;
+  const handleBackClick = isUploading ? () => setIsArchiveUploading(false) : undefined;
+
   return (
     <AppShell
-      title={currentPage.title}
+      title={pageTitle}
       activeTab={activeTab}
-      onTabChange={setActiveTab}
+      onTabChange={handleTabChange}
       showTopBar={currentPage.showTopBar}
+      bottomNav={showBottomNav}
+      onBackClick={handleBackClick}
     >
       <div style={{ height: '100%', overflow: 'hidden' }}>
         <PageComponent
           title={currentPage.title}
+          isUploading={isArchiveUploading}
+          setIsUploading={setIsArchiveUploading}
           onStartChat={activeTab === 'home' ? () => setActiveTab('chat') : undefined}
           onOpenArchive={activeTab === 'home' ? () => setActiveTab('archive') : undefined}
           onGoToSettings={activeTab === 'home' ? () => setActiveTab('settings') : undefined}

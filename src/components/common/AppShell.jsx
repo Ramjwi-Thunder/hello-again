@@ -13,7 +13,13 @@ function AppShell({
   onTabChange,
   showTopBar = true,
 }) {
-  const shellClassName = `app-shell${activeTab === 'home' ? ' app-shell-home' : ''}`;
+const shellClassName = `app-shell ${
+  activeTab === 'home'
+    ? 'app-shell-home'
+    : activeTab === 'archive'
+      ? 'app-shell--archive'
+      : ''
+}`;
 
   return (
     <div className={shellClassName}>
