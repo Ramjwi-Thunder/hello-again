@@ -5,7 +5,7 @@ import ArchivePage from './pages/Archive/ArchivePage';
 
 const PlaceholderPage = ({ title }) => (
   <div style={{ padding: '24px 20px', textAlign: 'left' }}>
-    <h2 style={{ margin: 0, fontSize: '24px' }}>{title}</h2>
+    <h2 style={{ margin: 0, fontSize: '24px' }}>{title} 페이지</h2>
   </div>
 );
 
@@ -20,15 +20,22 @@ const pages = [
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const currentPage = pages.find((page) => page.key === activeTab) ?? pages[0];
+  const PageComponent = currentPage.component;
 
   return (
     <AppShell
       title={currentPage.title}
       activeTab={activeTab}
       onTabChange={setActiveTab}
+      showTopBar={activeTab !== 'home'}
       showTopBar={currentPage.showTopBar}
     >
-      <div style={{ height: '100%', overflowY: 'auto' }}>{currentPage.component}</div>
+      <div style={{ height: '100%', overflow: 'hidden' }}>
+        <PageComponent
+          title={currentPage.title}
+          onStartChat={activeTab === 'home' ? () => setActiveTab('chat') : undefined}
+        />
+      </div>
     </AppShell>
   );
 }

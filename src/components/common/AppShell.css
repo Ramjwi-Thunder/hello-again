@@ -13,6 +13,8 @@
   box-sizing: border-box;
 }
 
+.app-shell-home {
+  background: linear-gradient(180deg, #f7f6f4 0%, #e2cff5 100%);
 .app-shell--archive {
   background: linear-gradient(180deg, #FFF 53.97%, #F7F5F4 64.8%, #E2CFF5 107.58%);
 }
@@ -26,6 +28,7 @@
   position: relative;
   overflow: hidden;
   min-height: 0; /* flex 아이템의 크기가 콘텐츠보다 작아질 수 있도록 허용 */
+  background: transparent;
 }
 
 .app-shell-bottom {
