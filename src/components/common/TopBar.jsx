@@ -30,14 +30,14 @@ const titleStyle = {
   lineHeight: '26px',
 };
 
-const TopBar = ({ title, onBackClick }) => {
+const TopBar = ({ title, onBackClick, rightContent }) => {
   return (
     <header style={topBarStyle}>
       <button type="button" style={iconButtonStyle} onClick={onBackClick} aria-label="Go back">
         <img src={backButton} alt="" aria-hidden="true" />
       </button>
       <h1 style={titleStyle}>{title}</h1>
-      <div style={iconButtonStyle} /> {/* 오른쪽 아이콘 영역 */}
+      <div style={iconButtonStyle}>{rightContent}</div> {/* 오른쪽 아이콘 영역 */}
     </header>
   );
 };

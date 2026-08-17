@@ -14,10 +14,10 @@ const ChatPage = () => <PlaceholderPage title="대화 페이지" />;
 const SettingsPage = () => <PlaceholderPage title="설정 페이지" />;
 
 const pages = [
-  { key: 'home', component: HomePage, title: '홈', showTopBar: true },
+  { key: 'home', component: HomePage, title: '홈', showTopBar: false },
   { key: 'history', component: HistoryPage, title: '기록', showTopBar: true },
   { key: 'chat', component: ChatPage, title: '대화', showTopBar: true },
-  { key: 'archive', component: ArchivePage, title: '', showTopBar: false },
+  { key: 'archive', component: ArchivePage, title: '기억 보관함', showTopBar: true },
   { key: 'settings', component: SettingsPage, title: '설정', showTopBar: true },
 ];
 
@@ -37,6 +37,9 @@ function App() {
         <PageComponent
           title={currentPage.title}
           onStartChat={activeTab === 'home' ? () => setActiveTab('chat') : undefined}
+          onOpenArchive={activeTab === 'home' ? () => setActiveTab('archive') : undefined}
+          onGoToSettings={activeTab === 'home' ? () => setActiveTab('settings') : undefined}
+          onGoToHistory={activeTab === 'home' ? () => setActiveTab('history') : undefined}
         />
       </div>
     </AppShell>

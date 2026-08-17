@@ -6,6 +6,10 @@
   align-items: center;
   padding-bottom: -20px; /* 하단 여백을 주어 안전 영역 확보 */
   box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 999;
 }
 
 .home-indicator-bar {
