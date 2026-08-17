@@ -6,7 +6,7 @@
   max-width: 390px;
   max-height: 844px;
   overflow: hidden; /* 앱 전체 스크롤 방지 (콘텐츠는 app-content 내에서 스크롤) */
-  background-color: var(--shell-bg);
+  background: #ffffff;
   box-shadow: none;
   border-radius: 32px;
   border: 3px solid rgba(0, 0, 0, 1.0);
@@ -15,6 +15,8 @@
 
 .app-shell-home {
   background: linear-gradient(180deg, #f7f6f4 0%, #e2cff5 100%);
+.app-shell--archive {
+  background: linear-gradient(180deg, #FFF 53.97%, #F7F5F4 64.8%, #E2CFF5 107.58%);
 }
 
 .app-content {

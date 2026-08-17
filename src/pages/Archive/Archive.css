@@ -1,0 +1,23 @@
+.tag-button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tag-button.active {
+  color: #000000;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.tag-button.inactive {
+  color: #a9a9a9;
+  background: #f3f4f6;
+  box-shadow: none;
+}
+

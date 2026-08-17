@@ -1,5 +1,5 @@
 import React from 'react';
-import backButton from '../../assets/images/BackButton.svg';
+import backButton from '../../assets/images/TopBar/BackButton.svg';
 
 const topBarStyle = {
   display: 'flex',

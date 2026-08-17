@@ -1,16 +1,110 @@
-# React + Vite
+# Hello-Again
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## 📌 컨셉
 
-Currently, two official plugins are available:
+**유품 대화록**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+고인이 남긴 문자, 편지, 음성 메모를 AI가 학습해 유가족이 원할 때 그리운 말투로 짧은 메시지를 남겨주는, 애도 과정을 돕는 디지털 유산 서비스입니다.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📁 폴더 구조
 
-## Expanding the Oxlint configuration
+### 페이지 폴더 (`src/pages`)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+| 폴더 | 설명 |
+| --- | --- |
+| `Archive` | 저장된 보관함 / 기록 모아보기 화면 |
+| `Auth` | 로그인 / 회원가입 기능 개발 |
+| `Chat` | AI 상담 채팅 화면 및 인터랙션 |
+| `Diary` | 기록 작성 폼 및 일지 목록 구현 |
+| `Home` | 홈 메인 대시보드 UI / 기능 개발 |
+| `Onboarding` | 앱 초기 온보딩 / 튜토리얼 화면 |
+| `Settings` | 사용자 설정 및 프로필 관리 화면 |
+
+### 컴포넌트 폴더 (`src/components`)
+
+`common`을 제외한 폴더는 `src/pages`의 동일한 이름을 가진 폴더에서만 사용하는 단독 컴포넌트를 모아둔 곳입니다. `common` 폴더는 여러 페이지에서 공통으로 사용하는 컴포넌트를 모아둔 곳입니다.
+
+```
+src/components
+├─ archive
+├─ chat
+├─ common
+├─ diary
+├─ home
+└─ settings
+```
+
+### 파일 · 폴더 네이밍 스타일
+
+| 대상 | 스타일 |
+| --- | --- |
+| 폴더 | `kebab-style` |
+| `.tsx` 파일 | `PascalCase` |
+| `.ts` 파일 | `camelCase` |
+
+---
+
+## ✅ 커밋 메시지 규칙
+
+```
+{작업 타입}: {작업 내용}
+```
+
+| 타입 | 설명 |
+| --- | --- |
+| `feat` | 신기능 작업 |
+| `ref` | 리팩토링 |
+| `fix` | 버그 작업 |
+| `docs` | 주석 처리, md 문서 작업 |
+| `chore` | 그 외 자잘한 작업 |
+
+---
+
+## 🌿 브랜치 네이밍 규칙
+
+상황에 맞게 아래 4가지 포맷 중 하나를 선택해 작성합니다.
+
+1. `{작업 타입}/{작업 내용 major}`
+2. `{작업 타입}/{이슈 번호}-{작업 내용 major}`
+3. `{작업 타입}/{작업 내용 major}-{작업 내용 minor}`
+4. `{작업 타입}/{이슈 번호}-{작업 내용 major}-{작업 내용 minor}`
+
+**예시**
+
+- Home 페이지 전체 작업 → `feat/home`
+- Home 페이지의 대시보드만 작업 → `feat/home-dashboard`
+- 위 작업에 이슈 번호 8번이 존재하는 경우 → `feat/8-home-dashboard`
+
+---
+
+## 🎨 코드 스타일
+
+- 들여쓰기는 **space 4칸**으로 통일합니다.
+
+### 네이밍 스타일
+
+가독성을 위해 웬만하면 축약 표현은 지양합니다.
+
+| 대상 | 스타일 | 비고 |
+| --- | --- | --- |
+| 컴포넌트 | `PascalCase` | |
+| 일반 함수 | `camelCase` | 이름은 항상 동사로 시작 (`get-`, `apply-` 등) |
+| Hook 함수 | `camelCase` | 이름 앞에 반드시 `use` 접두사 |
+| 변수 | `camelCase` | |
+| 상수 | `UPPER_SNAKE_CASE` | |
+| 타입 / 인터페이스 | `PascalCase` | |
+
+### Import 우선순위
+
+아래 순서대로 작성합니다.
+
+1. React 모듈
+2. 내장 모듈
+3. 외장 모듈
+4. 프로젝트 페이지
+5. 프로젝트 컴포넌트
+6. 프로젝트 유틸 모듈
+7. CSS
+8. 에셋 파일

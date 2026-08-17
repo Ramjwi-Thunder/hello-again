@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AppShell from './components/common/AppShell';
 import HomePage from './pages/Home/HomePage';
+import ArchivePage from './pages/Archive/ArchivePage';
 
 const PlaceholderPage = ({ title }) => (
   <div style={{ padding: '24px 20px', textAlign: 'left' }}>
@@ -9,11 +10,11 @@ const PlaceholderPage = ({ title }) => (
 );
 
 const pages = [
-  { key: 'home', component: HomePage, title: '홈' },
-  { key: 'history', component: PlaceholderPage, title: '기록' },
-  { key: 'chat', component: PlaceholderPage, title: '대화' },
-  { key: 'archive', component: PlaceholderPage, title: '보관함' },
-  { key: 'settings', component: PlaceholderPage, title: '설정' },
+  { key: 'home', component: <HomePage />, title: '홈', showTopBar: true },
+  { key: 'history', component: <PlaceholderPage title="기록 페이지" />, title: '기록', showTopBar: true },
+  { key: 'chat', component: <PlaceholderPage title="대화 페이지" />, title: '대화', showTopBar: true },
+  { key: 'archive', component: <ArchivePage />, title: '', showTopBar: false },
+  { key: 'settings', component: <PlaceholderPage title="설정 페이지" />, title: '설정', showTopBar: true },
 ];
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
       activeTab={activeTab}
       onTabChange={setActiveTab}
       showTopBar={activeTab !== 'home'}
+      showTopBar={currentPage.showTopBar}
     >
       <div style={{ height: '100%', overflow: 'hidden' }}>
         <PageComponent
