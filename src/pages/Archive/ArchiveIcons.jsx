@@ -70,14 +70,14 @@ export function UploadIcon({ className, style }) {
     >
       <path
         d="M12 16V4M12 4L8 8M12 4L16 8"
-        stroke="#8B8DFF"
+        stroke="#000000"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M4 14V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V14"
-        stroke="#8B8DFF"
+        stroke="#000000"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

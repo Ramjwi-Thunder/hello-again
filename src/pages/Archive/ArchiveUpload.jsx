@@ -85,7 +85,7 @@ function ArchiveUpload({ onCancel, onSuccess }) {
   return (
     <div className="archive-upload-container">
       <div className="archive-upload-content">
-        <div style={{ color: '#090909', fontSize: 18, fontFamily: 'Pretendard', fontWeight: '500', lineHeight: '21px', wordWrap: 'break-word', marginBottom: 6 }}>고인의 데이터를 입력해주세요</div>
+        <div style={{ color: '#090909', fontSize: 18, fontFamily: 'Pretendard', fontWeight: '500', lineHeight: '21px', wordWrap: 'break-word', marginBottom: 6, transform: 'translateX(-50px)' }}>고인의 데이터를 입력해주세요</div>
         <div style={{ color: '#646464', fontSize: 11.5, fontFamily: 'Pretendard', fontWeight: '400', lineHeight: '18.20px', wordWrap: 'break-word', marginBottom: 20 }}>사진, 음성, 영상, 글이 많을수록 더 자연스러운 대화가 만들어져요.</div>
 
         {/* Dropzone Area */}
