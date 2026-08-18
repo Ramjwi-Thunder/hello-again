@@ -179,9 +179,10 @@ function ArchivePage({
   if (selectedMemory) {
     return (
       <ArchiveDetail
-        memory={selectedMemory}
-        onBack={() => setSelectedMemory(null)}
-      />
+  memory={selectedMemory}
+  onBack={() => setSelectedMemory(null)}
+  onDeleted={fetchMemories}
+/>
     );
   }
 
