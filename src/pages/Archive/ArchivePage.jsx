@@ -3,6 +3,7 @@ import './Archive.css';
 import { supabase } from '../../lib/supabase';
 import ArchiveUpload from './ArchiveUpload';
 import { SearchIcon, InfoIcon, PlusIcon } from './ArchiveIcons';
+import ArchiveDetail from './ArchiveDetail';
 
 function ArchivePage({
   isUploading: propIsUploading,
@@ -22,6 +23,9 @@ function ArchivePage({
 
   const [activeTag, setActiveTag] = React.useState('전체');
   const [searchTerm, setSearchTerm] = React.useState('');
+
+  // 선택한 파일
+  const [selectedMemory, setSelectedMemory] = React.useState(null);
 
   // -----------------------------
   // memories 불러오기
@@ -109,7 +113,6 @@ function ArchivePage({
 
   // -----------------------------
   // Storage URL
-  // private bucket 기준
   // -----------------------------
   const getFileUrl = async (filePath) => {
     if (!filePath) return null;
@@ -171,6 +174,18 @@ function ArchivePage({
   }, [filteredMemories]);
 
   // -----------------------------
+  // 상세 페이지
+  // -----------------------------
+  if (selectedMemory) {
+    return (
+      <ArchiveDetail
+        memory={selectedMemory}
+        onBack={() => setSelectedMemory(null)}
+      />
+    );
+  }
+
+  // -----------------------------
   // 업로드 화면
   // -----------------------------
   if (isUploading) {
@@ -202,6 +217,14 @@ function ArchivePage({
             <div
               key={item.id}
               className="archive-media-card"
+              onClick={() => setSelectedMemory(item)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setSelectedMemory(item);
+                }
+              }}
             >
               {item.type === 'photo' ? (
                 url ? (
@@ -222,6 +245,7 @@ function ArchivePage({
                     className="archive-media-image"
                     controls
                     preload="metadata"
+                    onClick={(e) => e.stopPropagation()}
                   />
                 ) : (
                   <div className="archive-media-placeholder">
@@ -260,6 +284,14 @@ function ArchivePage({
           <div
             key={item.id}
             className="archive-list-item"
+            onClick={() => setSelectedMemory(item)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setSelectedMemory(item);
+              }
+            }}
           >
             <div className="archive-list-main">
               <span className="archive-list-type">
@@ -287,6 +319,7 @@ function ArchivePage({
   // -----------------------------
   return (
     <main className="archive-main">
+
       {/* Search */}
       <div className="archive-search-bar">
         <SearchIcon className="archive-search-icon" />
