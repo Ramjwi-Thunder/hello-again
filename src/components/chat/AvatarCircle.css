@@ -1,45 +1,15 @@
-.avatar-circle-container {
-  position: relative;
-  width: 196px;
-  height: 196px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-}
-
 .avatar-circle {
-  position: absolute;
-  border-radius: 50%;
-  box-shadow: 0 4px 20px rgba(139, 141, 255, 0.2);
-}
-
-/* 바깥쪽 레이어 - 가장 큼 */
-.avatar-circle--outer {
   width: 196px;
   height: 196px;
-  background: linear-gradient(135deg, #8b8dff 0%, #d7d4ff 100%);
-  opacity: 0.3;
-}
-
-/* 중간 레이어 */
-.avatar-circle--middle {
-  width: 160px;
-  height: 160px;
-  background: linear-gradient(135deg, #a8aaff 0%, #e0ddff 100%);
-  opacity: 0.6;
-}
-
-/* 안쪽 레이어 - 메인 */
-.avatar-circle--inner {
-  width: 128px;
-  height: 128px;
-  background: linear-gradient(135deg, #8b8dff 0%, #b5b1ff 100%);
-  opacity: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-size: 48px;
-  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.avatar-circle img {
+  width: 246px;
+  height: 246px;
+  display: block;
+  flex-shrink: 0;
 }
