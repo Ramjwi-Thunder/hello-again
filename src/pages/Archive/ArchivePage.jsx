@@ -4,64 +4,293 @@ import { supabase } from '../../lib/supabase';
 import ArchiveUpload from './ArchiveUpload';
 import { SearchIcon, InfoIcon, PlusIcon } from './ArchiveIcons';
 
-function ArchivePage({ isUploading: propIsUploading, setIsUploading: propSetIsUploading }) {
+function ArchivePage({
+  isUploading: propIsUploading,
+  setIsUploading: propSetIsUploading,
+}) {
   const [localIsUploading, setLocalIsUploading] = React.useState(false);
-  const isUploading = propIsUploading !== undefined ? propIsUploading : localIsUploading;
-  const setIsUploading = propSetIsUploading || setLocalIsUploading;
 
-  const [archives, setArchives] = React.useState([]);
+  const isUploading =
+    propIsUploading !== undefined ? propIsUploading : localIsUploading;
+
+  const setIsUploading =
+    propSetIsUploading || setLocalIsUploading;
+
+  const [memories, setMemories] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
 
-  const fetchArchives = React.useCallback(async () => {
+  const [activeTag, setActiveTag] = React.useState('전체');
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  // -----------------------------
+  // memories 불러오기
+  // -----------------------------
+  const fetchMemories = React.useCallback(async () => {
     setLoading(true);
+    setError('');
+
     const { data, error } = await supabase
-      .from('archives')
+      .from('memories')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('자료 불러오기 실패:', error);
+      console.error('기억 자료 불러오기 실패:', error);
+      setError('자료를 불러오지 못했습니다.');
+      setMemories([]);
       setLoading(false);
       return;
     }
 
-    setArchives(data || []);
+    setMemories(data || []);
     setLoading(false);
   }, []);
 
   React.useEffect(() => {
-    fetchArchives();
-  }, [fetchArchives]);
+    fetchMemories();
+  }, [fetchMemories]);
 
-  const tags = ['전체', '사진', '영상', '음성', '텍스트'];
-  const [activeTag, setActiveTag] = React.useState('전체');
-  const [searchTerm, setSearchTerm] = React.useState('');
+  // -----------------------------
+  // 파일 타입 → 화면 표시 이름
+  // -----------------------------
+  const getTypeLabel = (type) => {
+    switch (type) {
+      case 'photo':
+        return '사진';
 
-  const filteredArchives = archives.filter((item) => {
+      case 'video':
+        return '영상';
+
+      case 'audio':
+        return '음성';
+
+      case 'pdf':
+      case 'text':
+        return '텍스트';
+
+      default:
+        return '자료';
+    }
+  };
+
+  // -----------------------------
+  // 검색 + 필터
+  // -----------------------------
+  const filteredMemories = memories.filter((item) => {
     const matchesTag =
-      activeTag === '전체' || item.type === activeTag || item.category === activeTag;
-    const name = item.name || item.title || '';
-    const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
+      activeTag === '전체' ||
+      getTypeLabel(item.type) === activeTag;
+
+    const fileName =
+      item.file_name ||
+      item.title ||
+      '';
+
+    const matchesSearch = fileName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
     return matchesTag && matchesSearch;
   });
 
+  // -----------------------------
+  // 날짜 표시
+  // -----------------------------
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+
+    return new Date(dateString).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
+
+  // -----------------------------
+  // Storage URL
+  // private bucket 기준
+  // -----------------------------
+  const getFileUrl = async (filePath) => {
+    if (!filePath) return null;
+
+    const { data, error } = await supabase.storage
+      .from('archive-files')
+      .createSignedUrl(filePath, 60 * 60);
+
+    if (error) {
+      console.error('파일 URL 생성 실패:', error);
+      return null;
+    }
+
+    return data?.signedUrl || null;
+  };
+
+  // -----------------------------
+  // 사진/영상 미리보기 URL
+  // -----------------------------
+  const [previewUrls, setPreviewUrls] = React.useState({});
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    const loadPreviewUrls = async () => {
+      const mediaMemories = filteredMemories.filter(
+        (item) =>
+          (item.type === 'photo' || item.type === 'video') &&
+          item.file_path
+      );
+
+      if (mediaMemories.length === 0) {
+        setPreviewUrls({});
+        return;
+      }
+
+      const entries = await Promise.all(
+        mediaMemories.map(async (item) => {
+          const url = await getFileUrl(item.file_path);
+
+          return [item.id, url];
+        })
+      );
+
+      if (!cancelled) {
+        const urlMap = Object.fromEntries(
+          entries.filter(([, url]) => url)
+        );
+
+        setPreviewUrls(urlMap);
+      }
+    };
+
+    loadPreviewUrls();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [filteredMemories]);
+
+  // -----------------------------
+  // 업로드 화면
+  // -----------------------------
   if (isUploading) {
     return (
       <ArchiveUpload
         onCancel={() => setIsUploading(false)}
         onSuccess={() => {
           setIsUploading(false);
-          fetchArchives();
+          fetchMemories();
         }}
       />
     );
   }
 
+  // -----------------------------
+  // 미디어 갤러리
+  // -----------------------------
+  const renderMediaGallery = () => {
+    if (filteredMemories.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="archive-media-grid">
+        {filteredMemories.map((item) => {
+          const url = previewUrls[item.id];
+
+          return (
+            <div
+              key={item.id}
+              className="archive-media-card"
+            >
+              {item.type === 'photo' ? (
+                url ? (
+                  <img
+                    src={url}
+                    alt={item.file_name || item.title || '사진'}
+                    className="archive-media-image"
+                  />
+                ) : (
+                  <div className="archive-media-placeholder">
+                    사진 불러오는 중...
+                  </div>
+                )
+              ) : (
+                url ? (
+                  <video
+                    src={url}
+                    className="archive-media-image"
+                    controls
+                    preload="metadata"
+                  />
+                ) : (
+                  <div className="archive-media-placeholder">
+                    영상 불러오는 중...
+                  </div>
+                )
+              )}
+
+              <div className="archive-media-info">
+                <p className="archive-media-name">
+                  {item.file_name || item.title || '이름 없음'}
+                </p>
+
+                <span className="archive-media-date">
+                  {formatDate(item.created_at)}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // -----------------------------
+  // 전체 / 음성 / 텍스트 리스트
+  // -----------------------------
+  const renderList = () => {
+    if (filteredMemories.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="archive-list">
+        {filteredMemories.map((item) => (
+          <div
+            key={item.id}
+            className="archive-list-item"
+          >
+            <div className="archive-list-main">
+              <span className="archive-list-type">
+                {getTypeLabel(item.type)}
+              </span>
+
+              <p className="archive-list-name">
+                {item.file_name ||
+                  item.title ||
+                  '이름 없음'}
+              </p>
+            </div>
+
+            <span className="archive-list-date">
+              {formatDate(item.created_at)}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // -----------------------------
+  // 화면
+  // -----------------------------
   return (
     <main className="archive-main">
-      {/* Search Bar */}
+      {/* Search */}
       <div className="archive-search-bar">
         <SearchIcon className="archive-search-icon" />
+
         <input
           type="text"
           placeholder="검색"
@@ -73,14 +302,17 @@ function ArchivePage({ isUploading: propIsUploading, setIsUploading: propSetIsUp
 
       {/* Tags */}
       <div className="archive-tags-container">
-        {tags.map((tag) => {
+        {['전체', '사진', '영상', '음성', '텍스트'].map((tag) => {
           const isActive = activeTag === tag;
+
           return (
             <button
               key={tag}
               type="button"
               onClick={() => setActiveTag(tag)}
-              className={`tag-button ${isActive ? 'active' : 'inactive'}`}
+              className={`tag-button ${
+                isActive ? 'active' : 'inactive'
+              }`}
             >
               {tag}
             </button>
@@ -88,32 +320,22 @@ function ArchivePage({ isUploading: propIsUploading, setIsUploading: propSetIsUp
         })}
       </div>
 
-      {/* Content Area */}
+      {/* Content */}
       {loading ? (
         <div className="archive-status-message loading">
           불러오는 중...
         </div>
-      ) : filteredArchives.length > 0 ? (
-        <div className="archive-grid">
-          {filteredArchives.map((item, index) => (
-            <div key={item.id || index} className="archive-card">
-              <span className="archive-card-tag">{item.type || '자료'}</span>
-              <p className="archive-card-name">{item.name || item.title || '이름 없음'}</p>
-              {item.created_at && (
-                <span className="archive-card-date">
-                  {new Date(item.created_at).toLocaleDateString()}
-                </span>
-              )}
-            </div>
-          ))}
+      ) : error ? (
+        <div className="archive-status-message">
+          {error}
         </div>
-      ) : (
-        /* Empty State */
+      ) : filteredMemories.length === 0 ? (
         <div className="archive-empty-container">
           <div className="archive-empty-wrapper">
             <div className="archive-empty-icon-wrapper">
               <InfoIcon className="archive-empty-icon" />
             </div>
+
             <p className="archive-empty-text">
               아직 등록된 자료가 없습니다.
               <br />
@@ -123,9 +345,13 @@ function ArchivePage({ isUploading: propIsUploading, setIsUploading: propSetIsUp
             </p>
           </div>
         </div>
+      ) : activeTag === '사진' || activeTag === '영상' ? (
+        renderMediaGallery()
+      ) : (
+        renderList()
       )}
 
-      {/* FAB Button */}
+      {/* FAB */}
       <button
         type="button"
         onClick={() => setIsUploading(true)}

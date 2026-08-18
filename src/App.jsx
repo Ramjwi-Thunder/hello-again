@@ -5,7 +5,7 @@ import ArchivePage from './pages/Archive/ArchivePage';
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
 import AuthPage from './pages/Auth/AuthPage';
-
+import ArchiveUpload from './pages/Archive/ArchiveUpload';
 
 const PlaceholderPage = ({ title }) => (
   <div style={{ padding: '24px 20px', textAlign: 'left' }}>
@@ -89,16 +89,22 @@ function App() {
       onBackClick={handleBackClick}
     >
       <div style={{ height: '100%', overflow: 'auto' }}>
-        <PageComponent
-          title={currentPage.title}
-          isUploading={isArchiveUploading}
-          // onComplete is not a prop for PageComponent, but for OnboardingPage
-          setIsUploading={setIsArchiveUploading}
-          onStartChat={() => handleNavigation('chat')}
-          onOpenArchive={() => handleNavigation('archive')}
-          onGoToSettings={() => handleNavigation('settings')}
-          onGoToHistory={() => handleNavigation('history')}
-        />
+        {isUploading ? (
+  <ArchiveUpload
+    onCancel={() => setIsArchiveUploading(false)}
+    onSuccess={() => setIsArchiveUploading(false)}
+  />
+) : (
+  <PageComponent
+    title={currentPage.title}
+    isUploading={isArchiveUploading}
+    setIsUploading={setIsArchiveUploading}
+    onStartChat={() => handleNavigation('chat')}
+    onOpenArchive={() => handleNavigation('archive')}
+    onGoToSettings={() => handleNavigation('settings')}
+    onGoToHistory={() => handleNavigation('history')}
+  />
+)}
       </div>
     </AppShell>
   );
