@@ -1,0 +1,134 @@
+ .auth-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  box-sizing: border-box;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.auth-content {
+  width: 100%;
+  max-width: 342px;
+  padding-top: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-subtitle {
+  margin-top: 80px;
+  color: rgba(255, 255, 255, 0.92);
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+  font-family: "Pretendard", "Georgia", serif;
+}
+
+.auth-title {
+  margin: 24px 0 130px;
+  color: #ffffff;
+  text-align: center;
+  font-size: clamp(44px);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  font-weight: 400;
+  font-family: "Noto Serif KR", "Georgia", serif;
+}
+
+.auth-actions {
+  width: 100%;
+  margin-top: 74px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-button {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-button:hover {
+  transform: translateY(-1px);
+}
+
+.auth-button--primary {
+  background: #8B8DFF;
+  color: #ffffff;
+}
+
+.auth-button--kakao {
+  background: #FEE500;
+  color: #1c1c1c;
+}
+
+.auth-button--naver {
+  background: #2ecb62;
+  color: #ffffff;
+}
+
+.auth-button--google {
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f1f1f;
+}
+
+.auth-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.auth-icon--kakao {
+  background: url('../../assets/images/auth/icon_kakao.svg') center / contain no-repeat;
+  background-size: 18px;
+}
+
+.auth-icon--naver {
+  background: url('../../assets/images/auth/icon_naver.svg') center / contain no-repeat;
+  background-size: 14px;
+}
+
+.auth-icon--google {
+  background: url('../../assets/images/auth/icon_google.svg') center / contain no-repeat;
+}
+
+.auth-login-link {
+  margin-top: 20px;
+  background: transparent;
+  border: none;
+  padding: 0 0 4px;
+  color: rgba(31, 31, 31, 0.82);
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+
+  cursor: pointer;
+}

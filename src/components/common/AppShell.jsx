@@ -13,8 +13,9 @@ function AppShell({
   onTabChange,
   showTopBar = true,
   isSplash = false,
+  isAuth = false,
 }) {
-const shellClassName = `app-shell${activeTab === 'home' ? ' app-shell-home' : ''}${activeTab === 'archive' ? ' app-shell--archive' : ''}${isSplash ? ' app-shell-splash' : ''}`;
+const shellClassName = `app-shell${activeTab === 'home' ? ' app-shell-home' : ''}${activeTab === 'archive' ? ' app-shell--archive' : ''}${activeTab === 'auth' ? ' app-shell-auth' : ''}${isSplash ? ' app-shell-splash' : ''}${isAuth ? ' app-shell-auth' : ''}`;
 
   return (
     <div className={shellClassName}>

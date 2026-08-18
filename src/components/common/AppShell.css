@@ -25,6 +25,24 @@
   );
 }
 
+.app-shell-auth {
+  background: linear-gradient(
+    180deg,
+    rgba(165, 165, 247, 1) 0%,
+    rgba(244, 220, 245, 1) 65%,
+    rgba(246, 236, 245, 1) 100%
+  );
+}
+
+.app-shell-onboarding {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(244, 220, 245, 1) 65%,
+    rgba(246, 236, 245, 1) 100%
+  );
+}
+
 .app-shell-home {
   background: linear-gradient(180deg, #f7f6f4 0%, #e2cff5 100%);
 }

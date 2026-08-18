@@ -4,6 +4,8 @@ import HomePage from './pages/Home/HomePage';
 import ArchivePage from './pages/Archive/ArchivePage';
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
+import AuthPage from './pages/Auth/AuthPage';
+
 
 const PlaceholderPage = ({ title }) => (
   <div style={{ padding: '24px 20px', textAlign: 'left' }}>
@@ -23,11 +25,11 @@ const pages = [
   { key: 'settings', component: SettingsPage, title: '설정', showTopBar: true },
 ];
 
-const SHOW_SPLASH = true; // 스플래시 화면을 보려면 true로 설정
+const SHOW_SPLASH = true; // 앱 시작 시 스플래시를 먼저 노출
 
 function App() {
   // 1. 모든 상태 선언 (최상단)
-  const [activeTab, setActiveTab] = useState(SHOW_SPLASH ? 'splash' : 'home');
+  const [activeTab, setActiveTab] = useState(SHOW_SPLASH ? 'splash' : 'auth');
   const [isArchiveUploading, setIsArchiveUploading] = useState(false);
 
   // 2. 핸들러 함수 정의
@@ -54,8 +56,16 @@ function App() {
   // 온보딩 화면 분기
   if (activeTab === 'onboarding') {
     return (
-      <AppShell showTopBar={false} bottomNav={false}>
-        <OnboardingPage onComplete={() => setActiveTab('home')} />
+      <AppShell showTopBar={false} bottomNav={false} isOnboarding>
+        <OnboardingPage onComplete={() => setActiveTab('auth')} />
+      </AppShell>
+    );
+  }
+
+  if (activeTab === 'auth') {
+    return (
+      <AppShell showTopBar={false} bottomNav={false} isAuth>
+        <AuthPage onSignUp={() => setActiveTab('home')} />
       </AppShell>
     );
   }
