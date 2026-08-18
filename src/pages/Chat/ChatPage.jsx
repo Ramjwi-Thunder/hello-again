@@ -1,25 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Chat.css';
 import ChatHeader from '../../components/chat/ChatHeader';
 import AvatarCircle from '../../components/chat/AvatarCircle';
 import { MessageInput } from '../../components/common/MessageInput';
+import { sendChatMessage } from '../../util/chat';
 
 function ChatPage() {
+  const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSendMessage = async (message) => {
+    if (isLoading) {
+      return;
+    }
+
+    setMessages((currentMessages) => [
+      ...currentMessages,
+      {
+        id: crypto.randomUUID(),
+        role: 'user',
+        content: message,
+      },
+    ]);
+
+    setIsLoading(true);
+
+    try {
+      const response = await sendChatMessage(message);
+
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: response,
+        },
+      ]);
+    } catch (error) {
+      console.error('Chat response error:', error);
+
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: 'AI 응답을 가져오지 못했습니다.',
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="chat-page">
-      {/* 헤더 영역 */}
       <div className="chat-page-header">
         <ChatHeader />
       </div>
 
-      {/* 콘텐츠 영역 - 중앙에 아바타 표시 */}
       <div className="chat-page-content">
-        <AvatarCircle />
+        {messages.length === 0 ? (
+          <AvatarCircle />
+        ) : (
+          <div className="chat-messages">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`chat-message chat-message--${message.role}`}
+              >
+                {message.content}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* 하단 메시지 입력 필드 */}
       <div className="chat-page-bottom">
-        <MessageInput />
+        <MessageInput
+          onSend={handleSendMessage}
+          disabled={isLoading}
+        />
       </div>
     </div>
   );
