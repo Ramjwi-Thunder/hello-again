@@ -3,6 +3,7 @@ import AppShell from './components/common/AppShell';
 import HomePage from './pages/Home/HomePage';
 import ArchivePage from './pages/Archive/ArchivePage';
 import SplashPage from './pages/Onboarding/Splash';
+import OnboardingPage from './pages/Onboarding/Onboarding_1';
 
 const PlaceholderPage = ({ title }) => (
   <div style={{ padding: '24px 20px', textAlign: 'left' }}>
@@ -45,7 +46,16 @@ function App() {
   if (activeTab === 'splash') {
     return (
       <AppShell showTopBar={false} bottomNav={false} isSplash>
-        <SplashPage onComplete={() => setActiveTab('home')} />
+        <SplashPage onComplete={() => setActiveTab('onboarding')} />
+      </AppShell>
+    );
+  }
+
+  // 온보딩 화면 분기
+  if (activeTab === 'onboarding') {
+    return (
+      <AppShell showTopBar={false} bottomNav={false}>
+        <OnboardingPage onComplete={() => setActiveTab('home')} />
       </AppShell>
     );
   }
@@ -72,6 +82,7 @@ function App() {
         <PageComponent
           title={currentPage.title}
           isUploading={isArchiveUploading}
+          // onComplete is not a prop for PageComponent, but for OnboardingPage
           setIsUploading={setIsArchiveUploading}
           onStartChat={() => handleNavigation('chat')}
           onOpenArchive={() => handleNavigation('archive')}
