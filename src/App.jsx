@@ -16,6 +16,7 @@ import PostLegacy1 from './pages/Auth/PostLegacy/PostLegacy1';
 import PostLegacy2 from './pages/Auth/PostLegacy/PostLegacy2';
 import PostLegacy3 from './pages/Auth/PostLegacy/PostLegacy3';
 import HomePage from './pages/Home/HomePage';
+import MourningPeriodPage from './pages/Auth/MourningPeriod/PeriodPage';
 
 import ArchiveUpload from './pages/Archive/ArchiveUpload';
 
@@ -37,36 +38,21 @@ const pages = [
   { key: 'archive', component: ArchivePage, title: '기억 보관함', showTopBar: true },
   { key: 'settings', component: SettingsPage, title: '설정', showTopBar: true },
   { key: 'signup', component: SignUpPage, title: '', showTopBar: true },
-<<<<<<< HEAD
   { key: 'pre-1', component: PreLegacy1, title: '생전 등록', showTopBar: false },
   { key: 'pre-2', component: PreLegacy2, title: '생전 등록', showTopBar: false },
   { key: 'pre-3', component: PreLegacy3, title: '생전 등록', showTopBar: false },
   { key: 'post-1', component: PostLegacy1, title: '사후 등록', showTopBar: false },
   { key: 'post-2', component: PostLegacy2, title: '사후 등록', showTopBar: false },
   { key: 'post-3', component: PostLegacy3, title: '사후 등록', showTopBar: false },
+  {
+  key: 'mourning-period',
+  component: MourningPeriodPage,
+  title: '애도 기간',
+  showTopBar: false,
+  },
   { key: 'terms-service', component: TermsServicePage, title: '서비스 이용약관 동의', showTopBar: false },
   { key: 'terms-privacy', component: TermsPrivacyPage, title: '개인정보 수집 및 이용 안내', showTopBar: false },
   { key: 'terms-sensitive', component: TermsSensitivePage, title: '민감정보 처리 동의', showTopBar: false },
-=======
-  {
-    key: 'terms-service',
-    component: TermsServicePage,
-    title: '서비스 이용약관 동의',
-    showTopBar: false,
-  },
-  {
-    key: 'terms-privacy',
-    component: TermsPrivacyPage,
-    title: '개인정보 수집 및 이용 안내',
-    showTopBar: false,
-  },
-  {
-    key: 'terms-sensitive',
-    component: TermsSensitivePage,
-    title: '민감정보 처리 동의',
-    showTopBar: false,
-  },
->>>>>>> 9f9c04f263a0c250385b6bf821558001105ea23e
 ];
 
 const SHOW_SPLASH = true;
@@ -80,15 +66,7 @@ function App() {
   );
 
   const [isArchiveUploading, setIsArchiveUploading] = useState(false);
-<<<<<<< HEAD
   const [registrationMode, setRegistrationMode] = useState('after');
-=======
-
-  // ⭐ 추가
-  // 보관함 상세 화면인지 여부
-  const [isArchiveDetail, setIsArchiveDetail] = useState(false);
-
->>>>>>> 9f9c04f263a0c250385b6bf821558001105ea23e
   const [agreements, setAgreements] = useState({
     termsOfService: false,
     privacyPolicy: false,
@@ -96,6 +74,8 @@ function App() {
   });
   const allAgreementsAccepted = Object.values(agreements).every(Boolean);
   const effectiveTab = activeTab === 'registration-main' && !allAgreementsAccepted ? 'signup' : activeTab;
+  
+
 
   // -----------------------------
   // 탭 변경
@@ -164,7 +144,7 @@ function App() {
     }
 
     if (direction === 'next' && currentIndex === flow.length - 1) {
-      setActiveTab('home');
+      setActiveTab('mourning-period');
       return;
     }
 
@@ -196,19 +176,8 @@ function App() {
   // -----------------------------
   if (activeTab === 'onboarding') {
     return (
-<<<<<<< HEAD
       <AppShell showTopBar={false} bottomNav={false} isOnboarding>
         <OnboardingPage onComplete={() => setActiveTab('signup')} />
-=======
-      <AppShell
-        showTopBar={false}
-        bottomNav={false}
-        isOnboarding
-      >
-        <OnboardingPage
-          onComplete={() => setActiveTab('auth')}
-        />
->>>>>>> 9f9c04f263a0c250385b6bf821558001105ea23e
       </AppShell>
     );
   }
@@ -230,7 +199,6 @@ function App() {
     );
   }
 
-<<<<<<< HEAD
   if (activeTab === 'registration-main') {
     return (
       <AppShell showTopBar={false} bottomNav={false}>
@@ -251,6 +219,7 @@ function App() {
     effectiveTab !== 'signup' &&
     !effectiveTab.startsWith('terms-') &&
     !effectiveTab.startsWith('pre-') &&
+    effectiveTab !== 'mourning-period' &&
     !effectiveTab.startsWith('post-');
   const handleBackClick =
       effectiveTab === 'signup'
@@ -262,62 +231,6 @@ function App() {
           : isUploading
             ? () => setIsArchiveUploading(false)
             : undefined;
-=======
-// -----------------------------
-  // 일반 페이지 및 업로드 상태 계산
-  // -----------------------------
-  const currentPage =
-    pages.find((page) => page.key === effectiveTab) ?? pages[0];
-
-  const PageComponent = currentPage.component;
-
-  // 업로드 화면
-  const isUploading =
-    effectiveTab === 'archive' && isArchiveUploading;
-
-  // 제목
-  const pageTitle = isUploading
-    ? '업로드'
-    : currentPage.title;
-
-  // 업로드 화면 OR 보관함 상세 화면 OR 회원가입/약관 화면이면 하단 네비 숨김
-  const showBottomNav =
-    !isUploading &&
-    !isArchiveDetail &&
-    effectiveTab !== 'registration-main' &&
-    effectiveTab !== 'signup' &&
-    !effectiveTab.startsWith('terms-');
-
-  // -----------------------------
-  // 뒤로가기
-  // -----------------------------
-  const handleBackClick =
-    effectiveTab === 'signup'
-      ? () => setActiveTab('auth')
-
-      : effectiveTab === 'terms-service' ||
-        effectiveTab === 'terms-privacy' ||
-        effectiveTab === 'terms-sensitive'
-      ? () => setActiveTab('signup')
-
-      // 보관함 상세 → 보관함 목록
-      : isArchiveDetail
-      ? () => setIsArchiveDetail(false)
-
-      // 업로드 화면 → 보관함 목록
-      : isUploading
-      ? () => setIsArchiveUploading(false)
-
-      // 보관함 목록 → 홈
-      : effectiveTab === 'archive'
-      ? () => {
-          setActiveTab('home');
-          setIsArchiveUploading(false);
-          setIsArchiveDetail(false);
-        }
-
-      : undefined;
->>>>>>> 9f9c04f263a0c250385b6bf821558001105ea23e
 
   return (
     <AppShell
@@ -330,7 +243,6 @@ function App() {
 isAuth={effectiveTab === 'auth' || effectiveTab === 'signup'}
       isTerms={effectiveTab.startsWith('terms-')}
     >
-<<<<<<< HEAD
       <div className="page-scroll-area">
 {isArchiveUploading ? (
   <ArchiveUpload
@@ -339,69 +251,37 @@ isAuth={effectiveTab === 'auth' || effectiveTab === 'signup'}
   />
 ) : (
   <PageComponent
-    title={currentPage.title}
-    isUploading={isArchiveUploading}
-    setIsUploading={setIsArchiveUploading}
-    onBackClick={handleBackClick}
-    agreements={agreements}
-    setAgreements={setAgreements}
-    onStartRegistrationMain={effectiveTab === 'signup' ? handleStartRegistrationMain : undefined}
-    onAcceptTerms={
-      effectiveTab === 'terms-service'
-        ? () => handleAcceptTerms('termsOfService')
-        : effectiveTab === 'terms-privacy'
-          ? () => handleAcceptTerms('privacyPolicy')
-          : effectiveTab === 'terms-sensitive'
-            ? () => handleAcceptTerms('sensitiveInfo')
-            : undefined
-    }
-    onStartChat={() => handleNavigation('chat')}
-    onOpenArchive={() => handleNavigation('archive')}
-    onGoToSettings={() => handleNavigation('settings')}
-    onGoToHistory={() => handleNavigation('history')}
-    onOpenTerms={handleOpenTerms}
-    onRegistrationNext={() => handleRegistrationStep('next')}
-    onRegistrationBack={() => handleRegistrationStep('back')}
-    onRegistrationComplete={() => setActiveTab('home')}
-  />
+  title={currentPage.title}
+  isUploading={isArchiveUploading}
+  setIsUploading={setIsArchiveUploading}
+  onBackClick={handleBackClick}
+  agreements={agreements}
+  setAgreements={setAgreements}
+  onStartRegistrationMain={
+    effectiveTab === 'signup'
+      ? handleStartRegistrationMain
+      : undefined
+  }
+  onAcceptTerms={
+    effectiveTab === 'terms-service'
+      ? () => handleAcceptTerms('termsOfService')
+      : effectiveTab === 'terms-privacy'
+        ? () => handleAcceptTerms('privacyPolicy')
+        : effectiveTab === 'terms-sensitive'
+          ? () => handleAcceptTerms('sensitiveInfo')
+          : undefined
+  }
+  onStartChat={() => handleNavigation('chat')}
+  onOpenArchive={() => handleNavigation('archive')}
+  onGoToSettings={() => handleNavigation('settings')}
+  onGoToHistory={() => handleNavigation('history')}
+  onOpenTerms={handleOpenTerms}
+  onRegistrationNext={() => handleRegistrationStep('next')}
+  onRegistrationBack={() => handleRegistrationStep('back')}
+  onRegistrationComplete={() => setActiveTab('home')}
+  onMourningPeriodNext={() => setActiveTab('home')}
+/>
 )}
-=======
-      <div style={{ height: '100%', overflow: 'auto' }}>
-        {isArchiveUploading ? (
-          <ArchiveUpload
-            onCancel={() => setIsArchiveUploading(false)}
-            onSuccess={() => setIsArchiveUploading(false)}
-          />
-        ) : (
-          <PageComponent
-            title={currentPage.title}
-            isUploading={isArchiveUploading}
-            setIsUploading={setIsArchiveUploading}
-            isArchiveDetail={isArchiveDetail}
-            setIsArchiveDetail={setIsArchiveDetail}
-            onBackClick={handleBackClick}
-            agreements={agreements}
-            setAgreements={setAgreements}
-            onStartRegistrationMain={
-              effectiveTab === 'signup' ? handleStartRegistrationMain : undefined
-            }
-            onAcceptTerms={
-              effectiveTab === 'terms-service'
-                ? () => handleAcceptTerms('termsOfService')
-                : effectiveTab === 'terms-privacy'
-                ? () => handleAcceptTerms('privacyPolicy')
-                : effectiveTab === 'terms-sensitive'
-                ? () => handleAcceptTerms('sensitiveInfo')
-                : undefined
-            }
-            onStartChat={() => handleNavigation('chat')}
-            onOpenArchive={() => handleNavigation('archive')}
-            onGoToSettings={() => handleNavigation('settings')}
-            onGoToHistory={() => handleNavigation('history')}
-            onOpenTerms={handleOpenTerms}
-          />
-        )}
->>>>>>> 9f9c04f263a0c250385b6bf821558001105ea23e
       </div>
     </AppShell>
   );
