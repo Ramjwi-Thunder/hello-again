@@ -5,6 +5,8 @@ import ArchivePage from './pages/Archive/ArchivePage';
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
 import AuthPage from './pages/Auth/AuthPage';
+import SignUpPage from './pages/Auth/SignUpPage';
+
 import ArchiveUpload from './pages/Archive/ArchiveUpload';
 
 const PlaceholderPage = ({ title }) => (
@@ -23,6 +25,7 @@ const pages = [
   { key: 'chat', component: ChatPage, title: '대화', showTopBar: true },
   { key: 'archive', component: ArchivePage, title: '기억 보관함', showTopBar: true },
   { key: 'settings', component: SettingsPage, title: '설정', showTopBar: true },
+  { key: 'signup', component: SignUpPage, title: '', showTopBar: true },
 ];
 
 const SHOW_SPLASH = true; // 앱 시작 시 스플래시를 먼저 노출
@@ -65,7 +68,7 @@ function App() {
   if (activeTab === 'auth') {
     return (
       <AppShell showTopBar={false} bottomNav={false} isAuth>
-        <AuthPage onSignUp={() => setActiveTab('home')} />
+        <AuthPage onSignUp={() => setActiveTab('signup')} />
       </AppShell>
     );
   }
@@ -76,8 +79,13 @@ function App() {
 
   const isUploading = activeTab === 'archive' && isArchiveUploading;
   const pageTitle = isUploading ? '업로드' : currentPage.title;
-  const showBottomNav = !isUploading;
-  const handleBackClick = isUploading ? () => setIsArchiveUploading(false) : undefined;
+  const showBottomNav = !isUploading && activeTab !== 'signup';
+  const handleBackClick =
+    activeTab === 'signup'
+      ? () => setActiveTab('auth')
+      : isUploading
+        ? () => setIsArchiveUploading(false)
+        : undefined;
 
   return (
     <AppShell
@@ -89,7 +97,7 @@ function App() {
       onBackClick={handleBackClick}
     >
       <div style={{ height: '100%', overflow: 'auto' }}>
-        {isUploading ? (
+{isArchiveUploading ? (
   <ArchiveUpload
     onCancel={() => setIsArchiveUploading(false)}
     onSuccess={() => setIsArchiveUploading(false)}
@@ -99,6 +107,7 @@ function App() {
     title={currentPage.title}
     isUploading={isArchiveUploading}
     setIsUploading={setIsArchiveUploading}
+    onStartHome={activeTab === 'signup' ? () => setActiveTab('home') : undefined}
     onStartChat={() => handleNavigation('chat')}
     onOpenArchive={() => handleNavigation('archive')}
     onGoToSettings={() => handleNavigation('settings')}
