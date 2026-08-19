@@ -349,3 +349,38 @@
 .archive-detail::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 100, 100, 0.7);
 }
+
+/* ----------------------------- */
+/* 다운로드 버튼 */
+/* ----------------------------- */
+
+.archive-detail-download {
+  width: 100%;
+  height: 44px;
+
+  margin-top: 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #8b8dff;
+  color: #ffffff;
+
+  font-family: 'Pretendard', sans-serif;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: opacity 0.15s ease;
+}
+
+.archive-detail-download:hover {
+  opacity: 0.9;
+}
+
+.archive-detail-download:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

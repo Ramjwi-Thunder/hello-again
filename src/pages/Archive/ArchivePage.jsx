@@ -8,6 +8,7 @@ import ArchiveDetail from './ArchiveDetail';
 function ArchivePage({
   isUploading: propIsUploading,
   setIsUploading: propSetIsUploading,
+  setIsArchiveDetail,
 }) {
   const [localIsUploading, setLocalIsUploading] = React.useState(false);
 
@@ -179,10 +180,17 @@ function ArchivePage({
   if (selectedMemory) {
     return (
       <ArchiveDetail
-  memory={selectedMemory}
-  onBack={() => setSelectedMemory(null)}
-  onDeleted={fetchMemories}
-/>
+        memory={selectedMemory}
+        onBack={() => {
+          setSelectedMemory(null);
+
+          // ⭐ 상세 화면에서 나가면 하단 네비 다시 표시
+          if (setIsArchiveDetail) {
+            setIsArchiveDetail(false);
+          }
+        }}
+        onDeleted={fetchMemories}
+      />
     );
   }
 
@@ -218,12 +226,23 @@ function ArchivePage({
             <div
               key={item.id}
               className="archive-media-card"
-              onClick={() => setSelectedMemory(item)}
+              onClick={() => {
+                setSelectedMemory(item);
+
+                // ⭐ 상세 화면 진입 → 하단 네비 숨김
+                if (setIsArchiveDetail) {
+                  setIsArchiveDetail(true);
+                }
+              }}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   setSelectedMemory(item);
+
+                  if (setIsArchiveDetail) {
+                    setIsArchiveDetail(true);
+                  }
                 }
               }}
             >
@@ -285,12 +304,23 @@ function ArchivePage({
           <div
             key={item.id}
             className="archive-list-item"
-            onClick={() => setSelectedMemory(item)}
+            onClick={() => {
+              setSelectedMemory(item);
+
+              // ⭐ 상세 화면 진입 → 하단 네비 숨김
+              if (setIsArchiveDetail) {
+                setIsArchiveDetail(true);
+              }
+            }}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 setSelectedMemory(item);
+
+                if (setIsArchiveDetail) {
+                  setIsArchiveDetail(true);
+                }
               }
             }}
           >
