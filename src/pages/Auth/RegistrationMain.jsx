@@ -3,7 +3,7 @@ import './RegistrationMain.css';
 import { Component as Registration } from '../../components/common/Toggle/Registration';
 import SignupStartButton from '../../components/common/Button/SignupStartButton';
 
-function RegistrationMain() {
+function RegistrationMain({ onStartRegistration }) {
   const [selected, setSelected] = useState('after');
 
   return (
@@ -33,9 +33,7 @@ function RegistrationMain() {
       <div className="registration-main__footer">
         <SignupStartButton
           text="다음"
-          onClick={() => {
-            // 등록 메인에서는 선택만 하고, 실제 시작은 다음 단계에서 처리
-          }}
+          onClick={() => onStartRegistration?.(selected === 'before' ? 'before' : 'after')}
         />
       </div>
     </main>
