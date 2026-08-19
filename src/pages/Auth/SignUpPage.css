@@ -53,6 +53,8 @@
   position: absolute;
   top: 135px;
   text-align: left;
+
+
 }
 
 .div-wrapper .all-terms-agreement {
@@ -97,11 +99,22 @@
 .div-wrapper .privacy-policy,
 .div-wrapper .terms-agreement {
   align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
+  padding: 0;
   position: absolute;
   left: 0;
   width: 100%;
+}
+
+.div-wrapper .service-terms:focus-visible,
+.div-wrapper .privacy-policy:focus-visible,
+.div-wrapper .terms-agreement:focus-visible {
+  outline: 2px solid #8b8dff;
+  outline-offset: 4px;
 }
 
 .div-wrapper .service-terms {
@@ -185,13 +198,15 @@
   background-color: #8b8dff !important;
   left: 16px !important;
   position: absolute !important;
-  top: 650px !important;
+  top: 640px !important;
   width: calc(100% - 32px) !important;
   height: 50px !important;
   border: none;
   border-radius: 12px !important;
   color: #ffffff;
   cursor: pointer;
+  margin-bottom: 16px;
+  margin-top: 22px;
 }
 
 .div-wrapper .signup-start-button.off {
