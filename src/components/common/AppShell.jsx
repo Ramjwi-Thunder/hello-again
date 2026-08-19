@@ -14,8 +14,9 @@ function AppShell({
   showTopBar = true,
   isSplash = false,
   isAuth = false,
+  isTerms = false,
 }) {
-const shellClassName = `app-shell${activeTab === 'home' ? ' app-shell-home' : ''}${activeTab === 'archive' ? ' app-shell--archive' : ''}${activeTab === 'auth' ? ' app-shell-auth' : ''}${isSplash ? ' app-shell-splash' : ''}${isAuth ? ' app-shell-auth' : ''}`;
+const shellClassName = `app-shell${activeTab === 'home' ? ' app-shell-home' : ''}${activeTab === 'archive' ? ' app-shell--archive' : ''}${activeTab === 'auth' ? ' app-shell-auth' : ''}${isSplash ? ' app-shell-splash' : ''}${isAuth ? ' app-shell-auth' : ''}${isTerms ? ' app-shell-terms' : ''}`;
 
   return (
     <div className={shellClassName}>

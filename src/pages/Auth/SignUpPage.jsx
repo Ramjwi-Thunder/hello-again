@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./SignUpPage.css";
 import rightChevron from "../../assets/images/auth/right_chevron.svg";
 
@@ -15,14 +15,14 @@ const SignUpStartButton = ({ text, className, ...props }) => (
   </button>
 );
 
-export default function SignUpPage({ onStartHome }) {
-  const [agreements, setAgreements] = useState({
+export default function SignUpPage({ onStartHome, onOpenTerms, agreements, setAgreements }) {
+  const localAgreements = agreements ?? {
     termsOfService: false,
     privacyPolicy: false,
     sensitiveInfo: false,
-  });
+  };
 
-  const allAgreed = Object.values(agreements).every(Boolean);
+  const allAgreed = Object.values(localAgreements).every(Boolean);
 
   const terms = [
     {
@@ -56,7 +56,7 @@ export default function SignUpPage({ onStartHome }) {
 
   const handleAgreeAll = () => {
     const newValue = !allAgreed;
-    setAgreements({
+    setAgreements?.({
       termsOfService: newValue,
       privacyPolicy: newValue,
       sensitiveInfo: newValue,
@@ -64,7 +64,7 @@ export default function SignUpPage({ onStartHome }) {
   };
 
   const handleAgreementChange = (key) => {
-    setAgreements((prev) => ({
+    setAgreements?.((prev) => ({
       ...prev,
       [key]: !prev[key],
     }));
@@ -87,18 +87,40 @@ export default function SignUpPage({ onStartHome }) {
 
       <div className="terms-stack">
         {terms.map((term) => (
-          <div className={term.itemClass} key={term.key}>
+          <button
+            type="button"
+            className={term.itemClass}
+            key={term.key}
+            onClick={() =>
+              onOpenTerms?.(
+                term.key === 'termsOfService'
+                  ? 'terms-service'
+                  : term.key === 'privacyPolicy'
+                    ? 'terms-privacy'
+                    : 'terms-sensitive'
+              )
+            }
+          >
             <div className={term.detailClass}>
               <Property1Off
-                className={`property-1-off ${agreements[term.key] ? "checked" : ""}`}
-                onClick={() => handleAgreementChange(term.key)}
+                className={`property-1-off ${localAgreements[term.key] ? "checked" : ""}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAgreementChange(term.key);
+                }}
               />
-              <div className={term.textClass} onClick={() => handleAgreementChange(term.key)}>
+              <div
+                className={term.textClass}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAgreementChange(term.key);
+                }}
+              >
                 {term.text}
               </div>
             </div>
             <img className={term.vectorWrapClass} alt="Vector" src={term.vector} />
-          </div>
+          </button>
         ))}
       </div>
 

@@ -6,6 +6,9 @@ import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
 import AuthPage from './pages/Auth/AuthPage';
 import SignUpPage from './pages/Auth/SignUpPage';
+import TermsServicePage from './pages/Auth/TermsServicePage';
+import TermsPrivacyPage from './pages/Auth/TermsPrivacyPage';
+import TermsSensitivePage from './pages/Auth/TermsSensitivePage';
 
 import ArchiveUpload from './pages/Archive/ArchiveUpload';
 
@@ -26,6 +29,9 @@ const pages = [
   { key: 'archive', component: ArchivePage, title: '기억 보관함', showTopBar: true },
   { key: 'settings', component: SettingsPage, title: '설정', showTopBar: true },
   { key: 'signup', component: SignUpPage, title: '', showTopBar: true },
+  { key: 'terms-service', component: TermsServicePage, title: '서비스 이용약관 동의', showTopBar: false },
+  { key: 'terms-privacy', component: TermsPrivacyPage, title: '개인정보 수집 및 이용 안내', showTopBar: false },
+  { key: 'terms-sensitive', component: TermsSensitivePage, title: '민감정보 처리 동의', showTopBar: false },
 ];
 
 const SHOW_SPLASH = true; // 앱 시작 시 스플래시를 먼저 노출
@@ -34,6 +40,11 @@ function App() {
   // 1. 모든 상태 선언 (최상단)
   const [activeTab, setActiveTab] = useState(SHOW_SPLASH ? 'splash' : 'auth');
   const [isArchiveUploading, setIsArchiveUploading] = useState(false);
+  const [agreements, setAgreements] = useState({
+    termsOfService: false,
+    privacyPolicy: false,
+    sensitiveInfo: false,
+  });
 
   // 2. 핸들러 함수 정의
   const handleTabChange = (tab) => {
@@ -45,6 +56,15 @@ function App() {
     if (activeTab === 'home') {
       handleTabChange(targetView);
     }
+  };
+
+  const handleOpenTerms = (targetView) => {
+    setActiveTab(targetView);
+  };
+
+  const handleAcceptTerms = (termKey) => {
+    setAgreements((prev) => ({ ...prev, [termKey]: true }));
+    setActiveTab('signup');
   };
 
   // 3. 스플래시 화면 분기 (훅 선언 이후에 배치)
@@ -79,10 +99,12 @@ function App() {
 
   const isUploading = activeTab === 'archive' && isArchiveUploading;
   const pageTitle = isUploading ? '업로드' : currentPage.title;
-  const showBottomNav = !isUploading && activeTab !== 'signup';
+  const showBottomNav = !isUploading && activeTab !== 'signup' && !activeTab.startsWith('terms-');
   const handleBackClick =
     activeTab === 'signup'
       ? () => setActiveTab('auth')
+      : activeTab === 'terms-service' || activeTab === 'terms-privacy' || activeTab === 'terms-sensitive'
+        ? () => setActiveTab('signup')
       : isUploading
         ? () => setIsArchiveUploading(false)
         : undefined;
@@ -95,6 +117,8 @@ function App() {
       showTopBar={currentPage.showTopBar}
       bottomNav={showBottomNav}
       onBackClick={handleBackClick}
+      isAuth={activeTab === 'auth' || activeTab === 'signup'}
+      isTerms={activeTab.startsWith('terms-')}
     >
       <div style={{ height: '100%', overflow: 'auto' }}>
 {isArchiveUploading ? (
@@ -107,11 +131,24 @@ function App() {
     title={currentPage.title}
     isUploading={isArchiveUploading}
     setIsUploading={setIsArchiveUploading}
+    onBackClick={handleBackClick}
+    agreements={agreements}
+    setAgreements={setAgreements}
     onStartHome={activeTab === 'signup' ? () => setActiveTab('home') : undefined}
+    onAcceptTerms={
+      activeTab === 'terms-service'
+        ? () => handleAcceptTerms('termsOfService')
+        : activeTab === 'terms-privacy'
+          ? () => handleAcceptTerms('privacyPolicy')
+          : activeTab === 'terms-sensitive'
+            ? () => handleAcceptTerms('sensitiveInfo')
+            : undefined
+    }
     onStartChat={() => handleNavigation('chat')}
     onOpenArchive={() => handleNavigation('archive')}
     onGoToSettings={() => handleNavigation('settings')}
     onGoToHistory={() => handleNavigation('history')}
+    onOpenTerms={handleOpenTerms}
   />
 )}
       </div>
