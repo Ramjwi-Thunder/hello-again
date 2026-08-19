@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AppShell from './components/common/AppShell';
-import HomePage from './pages/Home/HomePage';
+import RegistrationMain from './pages/Auth/RegistrationMain';
 import ArchivePage from './pages/Archive/ArchivePage';
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
@@ -23,7 +23,7 @@ const ChatPage = () => <PlaceholderPage title="대화 페이지" />;
 const SettingsPage = () => <PlaceholderPage title="설정 페이지" />;
 
 const pages = [
-  { key: 'home', component: HomePage, title: '홈', showTopBar: false },
+  { key: 'registration-main', component: RegistrationMain, title: '등록 메인', showTopBar: false },
   { key: 'history', component: HistoryPage, title: '기록', showTopBar: true },
   { key: 'chat', component: ChatPage, title: '대화', showTopBar: true },
   { key: 'archive', component: ArchivePage, title: '기억 보관함', showTopBar: true },
@@ -70,6 +70,8 @@ function App() {
     privacyPolicy: false,
     sensitiveInfo: false,
   });
+  const allAgreementsAccepted = Object.values(agreements).every(Boolean);
+  const effectiveTab = activeTab === 'registration-main' && !allAgreementsAccepted ? 'signup' : activeTab;
 
   // -----------------------------
   // 탭 변경
@@ -86,7 +88,7 @@ function App() {
   // 홈에서 다른 페이지 이동
   // -----------------------------
   const handleNavigation = (targetView) => {
-    if (activeTab === 'home') {
+    if (activeTab === 'registration-main') {
       handleTabChange(targetView);
     }
   };
@@ -110,6 +112,16 @@ function App() {
     setActiveTab('signup');
   };
 
+  const handleStartRegistrationMain = () => {
+    if (allAgreementsAccepted) {
+      setActiveTab('registration-main');
+      return;
+    }
+
+    setActiveTab('signup');
+  };
+
+  // 3. 스플래시 화면 분기 (훅 선언 이후에 배치)
   // -----------------------------
   // 스플래시
   // -----------------------------
@@ -161,59 +173,60 @@ function App() {
     );
   }
 
-  // -----------------------------
-  // 일반 페이지
+// -----------------------------
+  // 일반 페이지 및 업로드 상태 계산
   // -----------------------------
   const currentPage =
-    pages.find((page) => page.key === activeTab) ?? pages[0];
+    pages.find((page) => page.key === effectiveTab) ?? pages[0];
 
   const PageComponent = currentPage.component;
 
   // 업로드 화면
   const isUploading =
-    activeTab === 'archive' && isArchiveUploading;
+    effectiveTab === 'archive' && isArchiveUploading;
 
   // 제목
   const pageTitle = isUploading
     ? '업로드'
     : currentPage.title;
 
-  // 업로드 화면 OR 보관함 상세 화면이면 하단 네비 숨김
+  // 업로드 화면 OR 보관함 상세 화면 OR 회원가입/약관 화면이면 하단 네비 숨김
   const showBottomNav =
     !isUploading &&
     !isArchiveDetail &&
-    activeTab !== 'signup' &&
-    !activeTab.startsWith('terms-');
+    effectiveTab !== 'registration-main' &&
+    effectiveTab !== 'signup' &&
+    !effectiveTab.startsWith('terms-');
 
   // -----------------------------
   // 뒤로가기
   // -----------------------------
-const handleBackClick =
-  activeTab === 'signup'
-    ? () => setActiveTab('auth')
+  const handleBackClick =
+    effectiveTab === 'signup'
+      ? () => setActiveTab('auth')
 
-    : activeTab === 'terms-service' ||
-      activeTab === 'terms-privacy' ||
-      activeTab === 'terms-sensitive'
-    ? () => setActiveTab('signup')
+      : effectiveTab === 'terms-service' ||
+        effectiveTab === 'terms-privacy' ||
+        effectiveTab === 'terms-sensitive'
+      ? () => setActiveTab('signup')
 
-    // 보관함 상세 → 보관함 목록
-    : isArchiveDetail
-    ? () => setIsArchiveDetail(false)
+      // 보관함 상세 → 보관함 목록
+      : isArchiveDetail
+      ? () => setIsArchiveDetail(false)
 
-    // 업로드 화면 → 보관함 목록
-    : isUploading
-    ? () => setIsArchiveUploading(false)
+      // 업로드 화면 → 보관함 목록
+      : isUploading
+      ? () => setIsArchiveUploading(false)
 
-    // 보관함 목록 → 홈
-    : activeTab === 'archive'
-    ? () => {
-        setActiveTab('home');
-        setIsArchiveUploading(false);
-        setIsArchiveDetail(false);
-      }
+      // 보관함 목록 → 홈
+      : effectiveTab === 'archive'
+      ? () => {
+          setActiveTab('home');
+          setIsArchiveUploading(false);
+          setIsArchiveDetail(false);
+        }
 
-    : undefined;
+      : undefined;
 
   return (
     <AppShell
@@ -223,87 +236,41 @@ const handleBackClick =
       showTopBar={currentPage.showTopBar}
       bottomNav={showBottomNav}
       onBackClick={handleBackClick}
-      isAuth={
-        activeTab === 'auth' ||
-        activeTab === 'signup'
-      }
-      isTerms={activeTab.startsWith('terms-')}
+isAuth={effectiveTab === 'auth' || effectiveTab === 'signup'}
+      isTerms={effectiveTab.startsWith('terms-')}
     >
-      <div
-        style={{
-          height: '100%',
-          overflow: 'auto',
-        }}
-      >
+      <div style={{ height: '100%', overflow: 'auto' }}>
         {isArchiveUploading ? (
           <ArchiveUpload
-            onCancel={() =>
-              setIsArchiveUploading(false)
-            }
-            onSuccess={() =>
-              setIsArchiveUploading(false)
-            }
+            onCancel={() => setIsArchiveUploading(false)}
+            onSuccess={() => setIsArchiveUploading(false)}
           />
         ) : (
           <PageComponent
             title={currentPage.title}
-
             isUploading={isArchiveUploading}
             setIsUploading={setIsArchiveUploading}
-
-            // ⭐ 보관함 상세 상태 전달
             isArchiveDetail={isArchiveDetail}
             setIsArchiveDetail={setIsArchiveDetail}
-
             onBackClick={handleBackClick}
-
             agreements={agreements}
             setAgreements={setAgreements}
-
-            onStartHome={
-              activeTab === 'signup'
-                ? () => setActiveTab('home')
-                : undefined
+            onStartRegistrationMain={
+              effectiveTab === 'signup' ? handleStartRegistrationMain : undefined
             }
-
             onAcceptTerms={
-              activeTab === 'terms-service'
-                ? () =>
-                    handleAcceptTerms(
-                      'termsOfService'
-                    )
-
-                : activeTab === 'terms-privacy'
-                ? () =>
-                    handleAcceptTerms(
-                      'privacyPolicy'
-                    )
-
-                : activeTab === 'terms-sensitive'
-                ? () =>
-                    handleAcceptTerms(
-                      'sensitiveInfo'
-                    )
-
+              effectiveTab === 'terms-service'
+                ? () => handleAcceptTerms('termsOfService')
+                : effectiveTab === 'terms-privacy'
+                ? () => handleAcceptTerms('privacyPolicy')
+                : effectiveTab === 'terms-sensitive'
+                ? () => handleAcceptTerms('sensitiveInfo')
                 : undefined
             }
-
-            onStartChat={() =>
-              handleNavigation('chat')
-            }
-
-            onOpenArchive={() =>
-              handleNavigation('archive')
-            }
-
-            onGoToSettings={() =>
-              handleNavigation('settings')
-            }
-
-            onGoToHistory={() =>
-              handleNavigation('history')
-            }
-
+            onStartChat={() => handleNavigation('chat')}
+            onOpenArchive={() => handleNavigation('archive')}
+            onGoToSettings={() => handleNavigation('settings')}
+            onGoToHistory={() => handleNavigation('history')}
             onOpenTerms={handleOpenTerms}
           />
         )}
