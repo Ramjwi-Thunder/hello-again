@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AppShell from './components/common/AppShell';
-import HomePage from './pages/Home/HomePage';
+import RegistrationMain from './pages/Auth/RegistrationMain';
 import ArchivePage from './pages/Archive/ArchivePage';
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
@@ -23,7 +23,7 @@ const ChatPage = () => <PlaceholderPage title="대화 페이지" />;
 const SettingsPage = () => <PlaceholderPage title="설정 페이지" />;
 
 const pages = [
-  { key: 'home', component: HomePage, title: '홈', showTopBar: false },
+  { key: 'registration-main', component: RegistrationMain, title: '등록 메인', showTopBar: false },
   { key: 'history', component: HistoryPage, title: '기록', showTopBar: true },
   { key: 'chat', component: ChatPage, title: '대화', showTopBar: true },
   { key: 'archive', component: ArchivePage, title: '기억 보관함', showTopBar: true },
@@ -45,6 +45,8 @@ function App() {
     privacyPolicy: false,
     sensitiveInfo: false,
   });
+  const allAgreementsAccepted = Object.values(agreements).every(Boolean);
+  const effectiveTab = activeTab === 'registration-main' && !allAgreementsAccepted ? 'signup' : activeTab;
 
   // 2. 핸들러 함수 정의
   const handleTabChange = (tab) => {
@@ -53,7 +55,7 @@ function App() {
   };
 
   const handleNavigation = (targetView) => {
-    if (activeTab === 'home') {
+    if (activeTab === 'registration-main') {
       handleTabChange(targetView);
     }
   };
@@ -64,6 +66,15 @@ function App() {
 
   const handleAcceptTerms = (termKey) => {
     setAgreements((prev) => ({ ...prev, [termKey]: true }));
+    setActiveTab('signup');
+  };
+
+  const handleStartRegistrationMain = () => {
+    if (allAgreementsAccepted) {
+      setActiveTab('registration-main');
+      return;
+    }
+
     setActiveTab('signup');
   };
 
@@ -94,20 +105,20 @@ function App() {
   }
 
   // 4. 일반 페이지 및 업로드 상태 계산
-  const currentPage = pages.find((page) => page.key === activeTab) ?? pages[0];
+  const currentPage = pages.find((page) => page.key === effectiveTab) ?? pages[0];
   const PageComponent = currentPage.component;
 
-  const isUploading = activeTab === 'archive' && isArchiveUploading;
+  const isUploading = effectiveTab === 'archive' && isArchiveUploading;
   const pageTitle = isUploading ? '업로드' : currentPage.title;
-  const showBottomNav = !isUploading && activeTab !== 'signup' && !activeTab.startsWith('terms-');
+  const showBottomNav = !isUploading && effectiveTab !== 'registration-main' && effectiveTab !== 'signup' && !effectiveTab.startsWith('terms-');
   const handleBackClick =
-    activeTab === 'signup'
+    effectiveTab === 'signup'
       ? () => setActiveTab('auth')
-      : activeTab === 'terms-service' || activeTab === 'terms-privacy' || activeTab === 'terms-sensitive'
+      : effectiveTab === 'terms-service' || effectiveTab === 'terms-privacy' || effectiveTab === 'terms-sensitive'
         ? () => setActiveTab('signup')
-      : isUploading
-        ? () => setIsArchiveUploading(false)
-        : undefined;
+        : isUploading
+          ? () => setIsArchiveUploading(false)
+          : undefined;
 
   return (
     <AppShell
@@ -117,8 +128,8 @@ function App() {
       showTopBar={currentPage.showTopBar}
       bottomNav={showBottomNav}
       onBackClick={handleBackClick}
-      isAuth={activeTab === 'auth' || activeTab === 'signup'}
-      isTerms={activeTab.startsWith('terms-')}
+      isAuth={effectiveTab === 'auth' || effectiveTab === 'signup'}
+      isTerms={effectiveTab.startsWith('terms-')}
     >
       <div style={{ height: '100%', overflow: 'auto' }}>
 {isArchiveUploading ? (
@@ -134,13 +145,13 @@ function App() {
     onBackClick={handleBackClick}
     agreements={agreements}
     setAgreements={setAgreements}
-    onStartHome={activeTab === 'signup' ? () => setActiveTab('home') : undefined}
+    onStartRegistrationMain={effectiveTab === 'signup' ? handleStartRegistrationMain : undefined}
     onAcceptTerms={
-      activeTab === 'terms-service'
+      effectiveTab === 'terms-service'
         ? () => handleAcceptTerms('termsOfService')
-        : activeTab === 'terms-privacy'
+        : effectiveTab === 'terms-privacy'
           ? () => handleAcceptTerms('privacyPolicy')
-          : activeTab === 'terms-sensitive'
+          : effectiveTab === 'terms-sensitive'
             ? () => handleAcceptTerms('sensitiveInfo')
             : undefined
     }

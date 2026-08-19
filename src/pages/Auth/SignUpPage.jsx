@@ -15,7 +15,7 @@ const SignUpStartButton = ({ text, className, ...props }) => (
   </button>
 );
 
-export default function SignUpPage({ onStartHome, onOpenTerms, agreements, setAgreements }) {
+export default function SignUpPage({ onStartRegistrationMain, onOpenTerms, agreements, setAgreements }) {
   const localAgreements = agreements ?? {
     termsOfService: false,
     privacyPolicy: false,
@@ -128,7 +128,7 @@ export default function SignUpPage({ onStartHome, onOpenTerms, agreements, setAg
         className={`signup-start-button ${allAgreed ? "on" : "off"}`}
         text="동의하고 시작하기"
         disabled={!allAgreed}
-        onClick={onStartHome}
+        onClick={onStartRegistrationMain}
       />
 
       <div className="NEW-home-indicator" />

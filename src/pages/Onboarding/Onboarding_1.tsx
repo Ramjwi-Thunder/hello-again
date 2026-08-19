@@ -1,10 +1,7 @@
 import './Onboarding_1.css';
 import { useState } from 'react';
 import { LongButton } from '../../components/common/Button/LongButton';
-
-const onboardingImage1 = new URL('../../assets/images/onboarding-1.png', import.meta.url).href;
-const onboardingImage2 = new URL('../../assets/images/onboarding-2.png', import.meta.url).href;
-const onboardingImage3 = new URL('../../assets/images/onboarding-3.png', import.meta.url).href;
+import grapeImage from '../../assets/images/rolling_grape.svg';
 
 interface OnboardingProps {
   onComplete?: () => void;
@@ -12,67 +9,57 @@ interface OnboardingProps {
 
 const steps = [
   {
-    image: onboardingImage1,
     title: '다시, 안녕',
-    description: '소중했던 그 사람과 다시 한번 이야기를 나누고\n따뜻했던 기억을 마주하는 시간',
+    description: '어떤 방식으로 시작할까요?',
   },
   {
-    image: onboardingImage2,
-    title: '남겨진 기억을 연결합니다.',
-    description: '사진, 글, 목소리에 담긴 소중한 추억들을 모아\n변치 않는 그리움의 기록으로 이어드릴게요.',
+    title: '사후 등록',
+    description: '소중한 사람을 떠나보낸 유가족이신가요?',
   },
   {
-    image: onboardingImage3,
-    title: '과거에 머무르기 위한 곳이 아닙니다.',
-    description: '고인을 대신하는 것이 아니라 남겨진 기억을 통해\n일상의 건강한 힘을 얻으실 수 있도록 돕습니다.',
+    title: '생전 등록',
+    description: '나의 기록을 미리 남겨두고 싶으신가요?',
   },
 ];
 
 const Onboarding_1 = ({ onComplete }: OnboardingProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const current = steps[currentStep];
-  const isLastStep = currentStep === steps.length - 1;
 
   const handlePrimaryAction = () => {
-    if (isLastStep) {
-      onComplete?.();
-      return;
-    }
-
-    setCurrentStep((step) => Math.min(step + 1, steps.length - 1));
+    onComplete?.();
   };
 
   return (
     <div className="onboarding">
       <div className="onboarding__screen" aria-label={`온보딩 ${currentStep + 1}단계`}>
-        <img src={current.image} alt={`Onboarding step ${currentStep + 1}`} className="onboarding__image" />
+        <div className="onboarding__hero" aria-hidden="true">
+          <img src={grapeImage} alt="" className="onboarding__grape" />
+        </div>
       </div>
 
       <div className="onboarding__content">
         <h1 className="onboarding__title">{current.title}</h1>
         <p className="onboarding__description">
-          {current.description.split('\n').map((line, index) => (
-            <span key={`${currentStep}-${index}`}>
-              {line}
-              <br />
-            </span>
-          ))}
+          {current.description}
         </p>
+        <div className="onboarding__cards">
+          <button type="button" className="onboarding__card onboarding__card--active">
+            <span className="onboarding__card-title">사후 등록</span>
+            <span className="onboarding__card-description">소중한 사람을 떠나보낸 유가족이신가요?</span>
+          </button>
+          <button type="button" className="onboarding__card">
+            <span className="onboarding__card-title">생전 등록</span>
+            <span className="onboarding__card-description">나의 기록을 미리 남겨두고 싶으신가요?</span>
+          </button>
+        </div>
       </div>
 
       <div className="onboarding__footer">
-        <div className="onboarding__pagination" aria-hidden="true">
-          {steps.map((_, index) => (
-            <div
-              key={index}
-              className={`onboarding__dot ${currentStep === index ? 'onboarding__dot--active' : ''}`}
-            />
-          ))}
-        </div>
         <LongButton
-          property1={isLastStep ? 'on' : 'off'}
+          property1="on"
           className="onboarding__button"
-          text={isLastStep ? '시작하기' : '다음'}
+          text="다음"
           onClick={handlePrimaryAction}
         />
       </div>
