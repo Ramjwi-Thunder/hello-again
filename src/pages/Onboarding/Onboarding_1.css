@@ -1,37 +1,34 @@
 .onboarding {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  padding: 18px 18px 20px;
-  background:
-    radial-gradient(circle at 50% 18%, rgba(181, 159, 255, 0.3), rgba(181, 159, 255, 0) 22%),
-    linear-gradient(180deg, #fbfbfc 0%, #efe6fb 70%, #e1d2f5 100%);
+  padding: 0 18px 18px;
+  background: #fff;
 }
 
 .onboarding__screen {
   width: 100%;
-  padding-top: 8px;
+  margin-top: 12px;
   box-sizing: border-box;
+  text-align: center;
 }
 
-.onboarding__hero {
+.onboarding__image {
   display: block;
-  width: 100%;
-  height: 190px;
-  position: relative;
-}
-
-.onboarding__grape {
-  position: absolute;
-  top: 28px;
-  right: 18px;
-  width: 172px;
-  height: 172px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 24px rgba(169, 132, 255, 0.38));
-  opacity: 0.96;
+  width: 342px;
+  height: 199px;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: cover;
+  aspect-ratio: 1.72;
+  border-radius: 24px;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(100deg, #f3eafc 0%, #e8d8ff 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 5px 5px rgba(115, 89, 154, 0.12);
 }
 
 .onboarding__content {
@@ -39,69 +36,28 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 34px 4px 0;
+  text-align: center;
+  padding: 19px 8px 0;
 }
 
 .onboarding__title {
   margin: 0;
-  color: #101010;
-  font-size: 24px;
+  color: #1d1d1d;
+  font-size: 22px;
   font-family: "Pretendard", sans-serif;
   line-height: 1.35;
   font-weight: 600;
   letter-spacing: -0.03em;
-  text-align: left;
+  text-align: center;
 }
 
 .onboarding__description {
-  margin: 10px 0 0;
-  color: #707070;
-  font-size: 16px;
-  line-height: 1.4;
-  letter-spacing: -0.04em;
-  text-align: left;
-}
-
-.onboarding__cards {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  margin-top: 34px;
-}
-
-.onboarding__card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  width: 100%;
-  min-height: 118px;
-  padding: 22px 24px;
-  border: 0;
-  border-radius: 18px;
-  background: #ffffff;
-  box-shadow: 0 8px 16px rgba(78, 55, 120, 0.08);
-  text-align: left;
-}
-
-.onboarding__card--active {
-  border: 2px solid #8e8eff;
-  box-shadow: 0 10px 20px rgba(113, 93, 255, 0.12);
-}
-
-.onboarding__card-title {
-  color: #171717;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.04em;
-}
-
-.onboarding__card-description {
-  color: #676767;
-  font-size: 16px;
-  line-height: 1.45;
-  letter-spacing: -0.04em;
+  margin: 14px 10px 0;
+  color: #5d5d5d;
+  font-size: 15px;
+  line-height: 1.35;
+  letter-spacing: -0.05em;
+  text-align: center;
 }
 
 .onboarding__footer {
@@ -109,15 +65,64 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding-top: 26px;
-  padding-bottom: 0;
+  gap: 18px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.onboarding__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 12px;
+}
+
+.onboarding__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dbd9e4;
+  transition: all 0.2s ease;
+}
+
+.onboarding__dot--active {
+  width: 18px;
+  border-radius: 999px;
+  background: #9b9ef8;
 }
 
 .onboarding__button {
-  width: 100%;
-  max-width: none;
+  width: 342px !important;
+  min-width: 342px !important;
+  max-width: 342px !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
   top: auto !important;
   left: auto !important;
   position: static !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.onboarding__footer .component {
+  width: 342px !important;
+  min-width: 342px !important;
+  max-width: 342px !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  align-items: center !important;
+}
+
+.onboarding__footer .component .button-label {
+  line-height: 50px !important;
 }
