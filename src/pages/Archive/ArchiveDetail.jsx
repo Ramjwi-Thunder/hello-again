@@ -7,6 +7,7 @@ function ArchiveDetail({ memory, onBack, onDeleted }) {
   const [textContent, setTextContent] = React.useState('');
   const [loading, setLoading] = React.useState(true);
   const [deleting, setDeleting] = React.useState(false);
+  const [downloading, setDownloading] = React.useState(false);
   const [error, setError] = React.useState('');
 
   React.useEffect(() => {
@@ -57,6 +58,60 @@ function ArchiveDetail({ memory, onBack, onDeleted }) {
   }, [memory]);
 
   // -----------------------------
+  // 파일 다운로드
+  // -----------------------------
+  const handleDownload = async () => {
+    if (!memory?.file_path) {
+      alert('파일 경로를 찾을 수 없습니다.');
+      return;
+    }
+
+    setDownloading(true);
+
+    try {
+      const { data, error: downloadError } = await supabase.storage
+        .from('archive-files')
+        .download(memory.file_path);
+
+      if (downloadError) {
+        throw downloadError;
+      }
+
+      if (!data) {
+        throw new Error('다운로드할 파일을 찾을 수 없습니다.');
+      }
+
+      // Blob을 임시 URL로 변환
+      const url = URL.createObjectURL(data);
+
+      // 다운로드 링크 생성
+      const link = document.createElement('a');
+      link.href = url;
+      link.download =
+        memory.file_name ||
+        memory.title ||
+        'memory-file';
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 임시 URL 정리
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('파일 다운로드 실패:', err);
+
+      alert(
+        `파일 다운로드에 실패했습니다.\n${
+          err.message || '알 수 없는 오류가 발생했습니다.'
+        }`
+      );
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  // -----------------------------
   // 파일 삭제
   // -----------------------------
   const handleDelete = async () => {
@@ -105,12 +160,12 @@ function ArchiveDetail({ memory, onBack, onDeleted }) {
       // ③ 삭제 성공
       alert('파일이 삭제되었습니다.');
 
-      // ⭐ 부모 ArchivePage의 목록을 즉시 새로고침
+      // 부모 ArchivePage 목록 즉시 새로고침
       if (onDeleted) {
         await onDeleted();
       }
 
-      // ⭐ 상세 화면 닫기
+      // 상세 화면 닫기
       if (onBack) {
         onBack();
       }
@@ -264,12 +319,11 @@ function ArchiveDetail({ memory, onBack, onDeleted }) {
 
       {/* Header */}
       <div className="archive-detail-header">
-
         <button
           type="button"
           className="archive-detail-back"
           onClick={onBack}
-          disabled={deleting}
+          disabled={deleting || downloading}
           aria-label="뒤로가기"
         >
           ←
@@ -278,7 +332,6 @@ function ArchiveDetail({ memory, onBack, onDeleted }) {
         <h1 className="archive-detail-title">
           {fileName}
         </h1>
-
       </div>
 
       {/* Content */}
@@ -297,12 +350,22 @@ function ArchiveDetail({ memory, onBack, onDeleted }) {
           {formatDate(memory.created_at)}
         </p>
 
+        {/* Download Button */}
+        <button
+          type="button"
+          className="archive-detail-download"
+          onClick={handleDownload}
+          disabled={deleting || downloading}
+        >
+          {downloading ? '다운로드 중...' : '파일 다운로드'}
+        </button>
+
         {/* Delete Button */}
         <button
           type="button"
           className="archive-detail-delete"
           onClick={handleDelete}
-          disabled={deleting}
+          disabled={deleting || downloading}
         >
           {deleting ? '삭제 중...' : '파일 삭제'}
         </button>
