@@ -77,3 +77,31 @@
   padding: 0 20px 40px;
   background: #ffffff;
 }
+.period-page__custom-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.period-page__custom-input {
+  width: 70px;
+  padding: 4px 0;
+  border: none;
+  border-bottom: 1px solid #9b91f7;
+  outline: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.period-page__custom-input::placeholder {
+  color: #a8adb8;
+}
+
+.period-page__custom-input::-webkit-outer-spin-button,
+.period-page__custom-input::-webkit-inner-spin-button {
+  margin: 0;
+}
