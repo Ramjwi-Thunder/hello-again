@@ -1,0 +1,107 @@
+.period-page {
+  background: #ffffff;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.period-page__content {
+  flex: 1;
+  padding: 24px 20px 32px;
+  box-sizing: border-box;
+}
+
+.period-page__title {
+  margin: 0 0 12px;
+  color: #090909;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.period-page__description {
+  margin: 0;
+  color: #636363;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.period-page__options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.period-page__option-row {
+  display: flex;
+  gap: 10px;
+}
+
+.period-page__option {
+  flex: 1;
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 18px 16px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.period-page__option--selected {
+  border-color: #8b8dff;
+  background: #f5f5ff;
+  box-shadow: 0 0 0 1px #8b8dff inset;
+}
+
+.period-page__option-label {
+  color: #090909;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.period-page__option-value {
+  color: #636363;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.period-page__footer {
+  position: sticky;
+  bottom: 0;
+  padding: 0 20px 40px;
+  background: #ffffff;
+}
+.period-page__custom-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.period-page__custom-input {
+  width: 70px;
+  padding: 4px 0;
+  border: none;
+  border-bottom: 1px solid #9b91f7;
+  outline: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.period-page__custom-input::placeholder {
+  color: #a8adb8;
+}
+
+.period-page__custom-input::-webkit-outer-spin-button,
+.period-page__custom-input::-webkit-inner-spin-button {
+  margin: 0;
+}

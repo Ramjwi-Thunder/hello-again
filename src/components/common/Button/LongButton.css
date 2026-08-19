@@ -33,6 +33,7 @@
 
 .component.on {
   background-color: #8b8dff;
+  height: 50px;
 }
 
 .component.none {
