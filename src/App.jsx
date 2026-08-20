@@ -4,6 +4,7 @@ import AppShell from './components/common/AppShell';
 
 import RegistrationMain from './pages/Auth/RegistrationMain';
 import ArchivePage from './pages/Archive/ArchivePage';
+import DiaryPage from './pages/Diary/DiaryPage';
 
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
@@ -54,10 +55,6 @@ const PlaceholderPage = ({ title }) => (
   </div>
 );
 
-const HistoryPage = () => (
-  <PlaceholderPage title="기록 페이지" />
-);
-
 const ChatPage = () => (
   <PlaceholderPage title="대화 페이지" />
 );
@@ -84,9 +81,9 @@ const pages = [
 
   {
     key: 'history',
-    component: HistoryPage,
-    title: '기록',
-    showTopBar: true,
+    component: DiaryPage,
+    title: '나의 애도 기록',
+    showTopBar: false,
   },
 
   {
