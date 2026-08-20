@@ -4,6 +4,7 @@ import AppShell from './components/common/AppShell';
 
 import RegistrationMain from './pages/Auth/RegistrationMain';
 import ArchivePage from './pages/Archive/ArchivePage';
+import ChatPage from './pages/Chat/ChatPage';
 
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
