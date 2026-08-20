@@ -5,8 +5,28 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
 );
 
-export const ACTIVE_MEMORIAL_ID =
-  'd354c71c-3354-49f3-844d-2397bb4168ce';
+const ACTIVE_MEMORIAL_STORAGE_KEY =
+  'hello-again-active-memorial-id';
+const FALLBACK_MEMORIAL_ID =
+  'ea0581b6-47e2-41cc-a9d0-067e2c2c3cbf';
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+export function getActiveMemorialId() {
+  try {
+    const storedMemorialId = window.localStorage.getItem(
+      ACTIVE_MEMORIAL_STORAGE_KEY,
+    );
+
+    if (storedMemorialId && UUID_PATTERN.test(storedMemorialId.trim())) {
+      return storedMemorialId.trim();
+    }
+  } catch (error) {
+    console.warn('Active memorial ID를 읽지 못했습니다.', error);
+  }
+
+  return FALLBACK_MEMORIAL_ID;
+}
 
 export async function getCurrentUser() {
   const {
@@ -28,7 +48,7 @@ export async function getCurrentUser() {
 }
 
 export async function getOrCreateChatRoom(
-  memorialId = ACTIVE_MEMORIAL_ID,
+  memorialId = getActiveMemorialId(),
 ) {
   const user = await getCurrentUser();
 

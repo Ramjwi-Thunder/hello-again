@@ -9,7 +9,7 @@ import {
   loadChatMessages,
   saveChatMessage,
   sendChatMessage,
-  ACTIVE_MEMORIAL_ID,
+  getActiveMemorialId,
 } from '../../util/chat';
 
 const DEFAULT_ASSISTANT_NAME = '아무개';
@@ -58,7 +58,8 @@ function ChatPage() {
       try {
         // RLS 제약으로 인해 getOrCreateChatRoom()은 room 객체만 반환
         // (memorial.name을 조회할 수 없음)
-        const room = await getOrCreateChatRoom(ACTIVE_MEMORIAL_ID);
+        const memorialId = getActiveMemorialId();
+        const room = await getOrCreateChatRoom(memorialId);
 
         if (!mounted) {
           return;
