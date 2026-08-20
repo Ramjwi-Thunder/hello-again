@@ -202,7 +202,7 @@ const pages = [
 ];
 
 
-const SHOW_SPLASH = false;
+const SHOW_SPLASH = true;
 
 
 // -----------------------------
