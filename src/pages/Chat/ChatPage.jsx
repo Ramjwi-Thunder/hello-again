@@ -3,7 +3,7 @@ import './Chat.css';
 import ChatHeader from '../../components/chat/ChatHeader';
 import AvatarCircle from '../../components/chat/AvatarCircle';
 import ChatMessage from '../../components/chat/ChatMessage';
-import { MessageInput } from '../../components/common/MessageInput';
+import { MessageInput } from '../../components/chat/MessageInput';
 import {
   getOrCreateChatRoom,
   loadChatMessages,
