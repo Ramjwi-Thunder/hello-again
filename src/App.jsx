@@ -8,6 +8,8 @@ import DiaryPage from './pages/Diary/DiaryPage';
 import DiaryWritePage from './pages/Diary/DiaryWritePage';
 import DiaryDetailPage from './pages/Diary/DiaryDetailPage';
 
+import ChatPage from './pages/Chat/ChatPage';
+
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
 
@@ -57,9 +59,9 @@ const PlaceholderPage = ({ title }) => (
   </div>
 );
 
-const ChatPage = () => (
-  <PlaceholderPage title="대화 페이지" />
-);
+// const ChatPage = () => (
+//   <PlaceholderPage title="대화 페이지" />
+// );
 
 
 const HistoryPage = () => (
