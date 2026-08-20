@@ -4,6 +4,9 @@ import AppShell from './components/common/AppShell';
 
 import RegistrationMain from './pages/Auth/RegistrationMain';
 import ArchivePage from './pages/Archive/ArchivePage';
+import DiaryPage from './pages/Diary/DiaryPage';
+import DiaryWritePage from './pages/Diary/DiaryWritePage';
+import DiaryDetailPage from './pages/Diary/DiaryDetailPage';
 import ChatPage from './pages/Chat/ChatPage';
 
 import SplashPage from './pages/Onboarding/Splash';
@@ -55,6 +58,11 @@ const PlaceholderPage = ({ title }) => (
   </div>
 );
 
+const ChatPage = () => (
+  <PlaceholderPage title="대화 페이지" />
+);
+
+
 const HistoryPage = () => (
   <PlaceholderPage title="기록 페이지" />
 );
@@ -80,9 +88,23 @@ const pages = [
 
   {
     key: 'history',
-    component: HistoryPage,
-    title: '기록',
-    showTopBar: true,
+    component: DiaryPage,
+    title: '나의 애도 기록',
+    showTopBar: false,
+  },
+
+  {
+    key: 'diary-write',
+    component: DiaryWritePage,
+    title: '',
+    showTopBar: false,
+  },
+
+  {
+    key: 'diary-detail',
+    component: DiaryDetailPage,
+    title: '',
+    showTopBar: false,
   },
 
   {
@@ -199,7 +221,7 @@ function App() {
   // -----------------------------
 
   const [activeTab, setActiveTab] = useState(
-    SHOW_SPLASH ? 'splash' : 'auth'
+    SHOW_SPLASH ? 'splash' : 'home'
   );
 
   const [isArchiveUploading, setIsArchiveUploading] =
@@ -208,6 +230,12 @@ function App() {
   // ⭐ 설정 - 내 정보 수정 화면 여부
   const [isSettingsEditing, setIsSettingsEditing] =
     useState(false);
+
+  const [addedDiaryItems, setAddedDiaryItems] =
+    useState([]);
+
+  const [selectedDiaryItem, setSelectedDiaryItem] =
+    useState(null);
 
   // 등록 방식
   const [registrationMode, setRegistrationMode] =
@@ -409,7 +437,7 @@ function App() {
       >
         <OnboardingPage
           onComplete={() =>
-            setActiveTab('signup')
+            setActiveTab('auth')
           }
         />
       </AppShell>
@@ -502,7 +530,9 @@ function App() {
     !effectiveTab.startsWith('terms-') &&
     !effectiveTab.startsWith('pre-') &&
     !effectiveTab.startsWith('post-') &&
-    effectiveTab !== 'mourning-period';
+    effectiveTab !== 'mourning-period' &&
+    effectiveTab !== 'diary-write' &&
+    effectiveTab !== 'diary-detail';
 
 
   // -----------------------------
@@ -530,6 +560,12 @@ function App() {
 
       ? () =>
           setIsArchiveUploading(false)
+
+      : effectiveTab === 'diary-write' ||
+        effectiveTab === 'diary-detail'
+
+      ? () =>
+          setActiveTab('history')
 
       : undefined;
 
@@ -672,6 +708,47 @@ function App() {
             // 기록
             onGoToHistory={() =>
               handleNavigation('history')
+            }
+
+
+            onOpenWrite={
+              effectiveTab === 'history'
+                ? () => setActiveTab('diary-write')
+                : undefined
+            }
+
+
+            onOpenDetail={
+              effectiveTab === 'history'
+                ? (item) => {
+                    setSelectedDiaryItem(item);
+                    setActiveTab('diary-detail');
+                  }
+                : undefined
+            }
+
+
+            addedItems={
+              effectiveTab === 'history'
+                ? addedDiaryItems
+                : undefined
+            }
+
+
+            item={
+              effectiveTab === 'diary-detail'
+                ? selectedDiaryItem
+                : undefined
+            }
+
+
+            onSave={
+              effectiveTab === 'diary-write'
+                ? (item) => {
+                    setAddedDiaryItems((previousItems) => [item, ...previousItems]);
+                    setActiveTab('history');
+                  }
+                : undefined
             }
 
 
