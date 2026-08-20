@@ -44,6 +44,7 @@ function SettingsPage({ onEditingChange }) {
     React.useState({
       duration: 45,
       paused: false,
+      ended: false,
     });
 
   const [editJourneySettings, setEditJourneySettings] =
@@ -151,7 +152,10 @@ function SettingsPage({ onEditingChange }) {
   };
 
   const handleSaveJourney = () => {
-    setJourneySettings({ ...editJourneySettings });
+    setJourneySettings({
+      ...editJourneySettings,
+      ended: journeySettings.ended,
+    });
     setIsEditingJourney(false);
     setShowCustomDurationInput(false);
     setCustomDuration('');
@@ -1298,6 +1302,11 @@ function SettingsPage({ onEditingChange }) {
             type="button"
             className="settings-header-action"
             onClick={handleEditJourney}
+            disabled={journeySettings.ended}
+            style={{
+              opacity: journeySettings.ended ? 0.4 : 1,
+              cursor: journeySettings.ended ? 'default' : 'pointer',
+            }}
           >
             수정
           </button>
@@ -1306,7 +1315,13 @@ function SettingsPage({ onEditingChange }) {
         <div className="settings-detail">
           <DetailRow
             label="상태"
-            value={journeySettings.paused ? '일시 중지' : '진행중'}
+            value={
+              journeySettings.ended
+                ? '종료됨'
+                : journeySettings.paused
+                ? '일시 중지'
+                : '진행중'
+            }
           />
 
           <DetailRow
@@ -1327,7 +1342,9 @@ function SettingsPage({ onEditingChange }) {
           <div className="settings-progress-row">
             <span>진행률</span>
             <strong>
-              {journeySettings.paused
+              {journeySettings.ended
+                ? '종료됨'
+                : journeySettings.paused
                 ? '일시 중지'
                 : `${getJourneyProgress(journeySettings.duration)}%`}
             </strong>
@@ -1492,16 +1509,43 @@ function SettingsPage({ onEditingChange }) {
 
   if (view === 'journey-end') {
 
+    if (journeySettings.ended) {
+      return (
+        <div className="settings-subpage">
+          <SubHeader
+            title="여정 종료"
+            onBack={() => setView('main')}
+          />
+
+          <div className="settings-confirm">
+            <h2>이미 종료된 여정이에요.</h2>
+
+            <p>
+              종료된 여정은 다시 진행할 수 없어요.
+              <br />
+              기록과 기억은 그대로 보관돼요.
+            </p>
+
+            <div className="settings-confirm-buttons">
+              <button
+                type="button"
+                className="primary"
+                onClick={() => setView('main')}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="settings-subpage">
-
         <SubHeader
           title="여정 종료"
-          onBack={() =>
-            setView('main')
-          }
+          onBack={() => setView('main')}
         />
-
 
         <div className="settings-confirm">
 
@@ -1511,29 +1555,31 @@ function SettingsPage({ onEditingChange }) {
 
           <p>
             종료하면 대화가 중단되며,
+            <br />
             특별한 날 편지는 계속 받을 수 있어요.
+            <br />
+            <br />
+            종료 후에는 여정을 다시 진행할 수 없어요.
           </p>
-
 
           <div className="settings-confirm-buttons">
 
             <button
               type="button"
-              onClick={() =>
-                setView('main')
-              }
+              onClick={() => setView('main')}
             >
               취소
             </button>
-
 
             <button
               type="button"
               className="primary"
               onClick={() => {
-                alert(
-                  '여정이 종료되었습니다.'
-                );
+                setJourneySettings((prev) => ({
+                  ...prev,
+                  ended: true,
+                  paused: false,
+                }));
 
                 setView('main');
               }}
@@ -1544,11 +1590,9 @@ function SettingsPage({ onEditingChange }) {
           </div>
 
         </div>
-
       </div>
     );
   }
-
 
   return null;
 }
