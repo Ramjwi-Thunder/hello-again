@@ -7,7 +7,6 @@ import ArchivePage from './pages/Archive/ArchivePage';
 import DiaryPage from './pages/Diary/DiaryPage';
 import DiaryWritePage from './pages/Diary/DiaryWritePage';
 import DiaryDetailPage from './pages/Diary/DiaryDetailPage';
-import ChatPage from './pages/Chat/ChatPage';
 
 import SplashPage from './pages/Onboarding/Splash';
 import OnboardingPage from './pages/Onboarding/Onboarding_1';
