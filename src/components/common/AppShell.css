@@ -6,7 +6,8 @@
   max-width: 390px;
   max-height: 844px;
   overflow: hidden; /* 앱 전체 스크롤 방지 (콘텐츠는 app-content 내에서 스크롤) */
-  background: #ffffff;
+  background: #fff;
+  position: relative; /* 자식 요소의 absolute positioning 기준 */
   box-shadow: none;
   border-radius: 32px;
   border: 3px solid rgba(0, 0, 0, 1.0);
@@ -18,6 +19,43 @@
     #f7f6f4 0%,
     #f4dcf5 100%
   );
+}
+
+.app-shell-splash {
+  background: linear-gradient(
+    180deg,
+    rgba(176, 177, 244, 1) 0%,
+    rgba(204, 190, 243, 1) 26%,
+    rgba(228, 208, 237, 1) 54%,
+    rgba(244, 220, 245, 1) 76%,
+    rgba(248, 246, 244, 1) 100%
+  );
+}
+
+.app-shell-auth {
+  background: linear-gradient(
+    180deg,
+    rgba(165, 165, 247, 1) 0%,
+    rgba(244, 220, 245, 1) 65%,
+    rgba(246, 236, 245, 1) 100%
+  );
+}
+
+.app-shell-terms {
+  background: #ffffff;
+}
+
+.app-shell-onboarding {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(244, 220, 245, 1) 65%,
+    rgba(246, 236, 245, 1) 100%
+  );
+}
+
+.app-shell-home {
+  background: linear-gradient(180deg, #f7f6f4 0%, #e2cff5 100%);
 }
 
 .app-shell--archive {
@@ -33,6 +71,7 @@
   position: relative;
   overflow: hidden;
   min-height: 0; /* flex 아이템의 크기가 콘텐츠보다 작아질 수 있도록 허용 */
+  background: transparent;
 }
 
 .app-shell-bottom {

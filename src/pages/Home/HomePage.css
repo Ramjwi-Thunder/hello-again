@@ -1,0 +1,234 @@
+.homepage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  transform: translateY(-3px);
+}
+
+.homepage_hero {
+  position: relative;
+  top: 159px;
+  left: 25px;
+  z-index: 1;
+}
+
+.homepage_notification-wrap {
+  position: absolute;
+  top: -90px;
+  right: 16px;
+}
+
+.homepage_hero-copy {
+  max-width: 300px;
+  text-align: left;
+}
+
+.homepage_title {
+  margin: 0 0 0;
+  color: #090909;
+  font-family: "Pretendard-Bold", 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 33.8px; /* 1.3 */
+  letter-spacing: -0.52px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.homepage_subtitle {
+  margin: 15px 0 0 0;
+  color: #646464;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3;
+  white-space: pre-line;
+  text-align: left;
+}
+
+.homepage_background-grape {
+  position: absolute;
+  top: 40px;
+  right: 16px;
+  width: 160px;
+  pointer-events: none;
+}
+
+.homepage_cta-wrap {
+  position: absolute;
+  top: 268px;
+  left: 13px;
+  z-index: 2;
+}
+
+.homepage_cta {
+  min-width: 208px;
+  height: 50px;
+  padding: 13px;
+  border: none;
+  border-radius: 12px;
+  background: #8b8dff;
+  box-shadow: 0 4px 5px rgba(157, 157, 157, 0.25);
+  color: #ffffff;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.homepage_progress-card {
+  position: absolute;
+  top: 336px;
+  left: 13px;
+  width: 358px;
+  height: 152px;
+  padding: 20px 17px 12px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 5px rgba(157, 157, 157, 0.25);
+  cursor: pointer;
+}
+
+.homepage_progress-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.homepage_progress-title {
+  margin: 0;
+  color: #646464;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.homepage_progress-percent {
+  margin-top: -7px;
+  color: #8b8dff;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.homepage_progress-count {
+  margin-top: -10px;
+  color: #646464;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.homepage_progress-count-total {
+  color: #aeaeae;
+  font-size: 12px;
+}
+
+.homepage_progress-track {
+  width: 100%;
+  height: 10px;
+  margin-top: 8px;
+  border-radius: 5px;
+  background: #f4f4f4;
+  box-shadow: inset 0 2px 4px #e3e3e3;
+  overflow: hidden;
+}
+
+.homepage_progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #8b8dff;
+  box-shadow: inset 0 2px 4px #e3e3e3;
+}
+
+.homepage_progress-period {
+  width: 100%;
+  height: 36px;
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #646464;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.homepage_progress-period-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.homepage_progress-chevron {
+  width: 8px;
+  height: 8px;
+}
+
+.homepage_memory-grid {
+  position: absolute;
+  top: 506px;
+  left: 13px;
+  width: 358px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.homepage_memory-card {
+  position: relative;
+  height: 161px;
+  width: 169px;
+  padding: 17px 15px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background:
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(244, 220, 245, 0.35) 0%, rgba(255, 255, 255, 0.35) 70%),
+    #ffffff;
+  box-shadow: 0 4px 4px rgba(158, 158, 158, 0.25);
+}
+
+.homepage_memory-card--story {
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.homepage_memory-card-text {
+  margin: 0;
+  color: #646464;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.9px;
+  white-space: pre-line;
+  text-align: left;
+}
+
+.homepage_memory-card--prompt {
+  cursor: pointer;
+}
+
+.homepage_memory-card-text--story {
+  max-width: 124px;
+}
+
+.homepage_memory-illustration {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 72px;
+  height: 72px;
+}

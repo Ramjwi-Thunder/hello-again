@@ -1,0 +1,386 @@
+.archive-detail {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  box-sizing: border-box;
+  background: #ffffff;
+
+  /* 스크롤바가 화면 위에 겹쳐서 표시되도록 */
+  overflow-y: overlay;
+  overflow-x: hidden;
+
+  padding-bottom: 100px;
+}
+
+/* ----------------------------- */
+/* Header */
+/* ----------------------------- */
+
+.archive-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-height: 52px;
+  padding: 0 16px;
+
+  border-bottom: 1px solid #eeeeee;
+  background: #ffffff;
+
+  box-sizing: border-box;
+
+  /* 스크롤해도 위에 고정 */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.archive-detail-back {
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+  border: none;
+  background: transparent;
+
+  color: #222222;
+  font-size: 24px;
+
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.archive-detail-title {
+  flex: 1;
+
+  margin: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #222222;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ----------------------------- */
+/* Content */
+/* ----------------------------- */
+
+.archive-detail-content {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  padding: 16px;
+  box-sizing: border-box;
+
+  /* 기존의 별도 스크롤 제거 */
+  overflow: visible;
+
+  /* 콘텐츠가 길어지면 전체 페이지가 스크롤 */
+  min-height: 0;
+}
+
+/* ----------------------------- */
+/* Loading / Error */
+/* ----------------------------- */
+
+.archive-detail-loading,
+.archive-detail-error,
+.archive-detail-unknown {
+  color: #888888;
+  font-size: 13px;
+  text-align: center;
+
+  padding: 40px 16px;
+}
+
+/* ----------------------------- */
+/* 사진 */
+/* ----------------------------- */
+
+.archive-detail-photo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  /* 높이를 제한하지 않음 */
+  height: auto;
+}
+
+.archive-detail-photo {
+  display: block;
+
+  width: auto;
+  max-width: 100%;
+
+  /* 사진 전체가 길어도 페이지 전체가 스크롤 */
+  height: auto;
+  max-height: none;
+
+  object-fit: contain;
+
+  border-radius: 10px;
+}
+
+/* ----------------------------- */
+/* 영상 */
+/* ----------------------------- */
+
+.archive-detail-video-wrapper {
+  width: 100%;
+}
+
+.archive-detail-video {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+
+  max-height: 600px;
+
+  border-radius: 10px;
+
+  background: #000000;
+}
+
+/* ----------------------------- */
+/* 음성 */
+/* ----------------------------- */
+
+.archive-detail-audio-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 30px 16px;
+
+  box-sizing: border-box;
+}
+
+.archive-detail-audio-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 80px;
+  height: 80px;
+
+  margin-bottom: 20px;
+
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  font-size: 32px;
+}
+
+.archive-detail-audio-name {
+  max-width: 100%;
+
+  margin: 0 0 20px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #222222;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.archive-detail-audio {
+  width: 100%;
+}
+
+/* ----------------------------- */
+/* 텍스트 */
+/* ----------------------------- */
+
+.archive-detail-text-wrapper {
+  width: 100%;
+
+  align-self: flex-start;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
+  background: #f8f8f8;
+
+  box-sizing: border-box;
+}
+
+.archive-detail-text {
+  margin: 0;
+
+  color: #333333;
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  /* 긴 텍스트도 전부 표시 */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ----------------------------- */
+/* PDF */
+/* ----------------------------- */
+
+.archive-detail-pdf-wrapper {
+  width: 100%;
+  height: 600px;
+}
+
+.archive-detail-pdf {
+  width: 100%;
+  height: 100%;
+
+  border: none;
+}
+
+/* ----------------------------- */
+/* 파일 정보 */
+/* ----------------------------- */
+
+.archive-detail-info {
+  flex-shrink: 0;
+
+  width: 100%;
+
+  padding: 16px 16px 30px;
+
+  border-top: 1px solid #eeeeee;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+.archive-detail-file-name {
+  margin: 0 0 4px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #222222;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.archive-detail-date {
+  margin: 0;
+
+  color: #9e9e9e;
+
+  font-size: 11px;
+}
+
+/* ----------------------------- */
+/* 삭제 버튼 */
+/* ----------------------------- */
+
+.archive-detail-delete {
+  width: 100%;
+  height: 44px;
+
+  margin-top: 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #f3f3f3;
+
+  color: #e04b4b;
+
+  font-family: 'Pretendard', sans-serif;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background-color 0.15s ease;
+}
+
+.archive-detail-delete:hover {
+  background: #eeeeee;
+}
+
+.archive-detail-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================= */
+/* Archive Detail Scrollbar */
+/* ============================= */
+
+.archive-detail::-webkit-scrollbar {
+  width: 5px;
+}
+
+.archive-detail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.archive-detail::-webkit-scrollbar-thumb {
+  background: rgba(130, 130, 130, 0.55);
+  border-radius: 999px;
+}
+
+.archive-detail::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 100, 100, 0.7);
+}
+
+/* ----------------------------- */
+/* 다운로드 버튼 */
+/* ----------------------------- */
+
+.archive-detail-download {
+  width: 100%;
+  height: 44px;
+
+  margin-top: 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #8b8dff;
+  color: #ffffff;
+
+  font-family: 'Pretendard', sans-serif;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: opacity 0.15s ease;
+}
+
+.archive-detail-download:hover {
+  opacity: 0.9;
+}
+
+.archive-detail-download:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

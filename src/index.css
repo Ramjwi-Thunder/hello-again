@@ -88,6 +88,18 @@ body {
   overflow: hidden;
 }
 
+.page-scroll-area {
+  height: 100%;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.page-scroll-area::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 /* Resetting default margins for block elements */
 h1, h2, p {
   margin: 0;

@@ -64,7 +64,7 @@ function StatusBar() {
   }, []);
 
   return (
-    <div style={statusBarStyle} aria-label="Status bar">
+    <div className="status-bar" style={statusBarStyle} aria-label="Status bar">
       <div style={timeStyle}>{time}</div>
       <div style={iconsStyle} aria-hidden="true">
         <img src={mobileSignal} alt="" style={iconStyle} />

@@ -1,13 +1,19 @@
 .bottom-nav {
-  width: 100%;
+  width: min(100%, 390px);
   padding: 0 16px 8px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 35px;
+  z-index: 1000;
 }
 
 .bottom-nav-rail {
   width: 100%;
+  bottom: -8px;
   height: 66px;
   -webkit-backdrop-filter: blur(2px) brightness(100.0%) saturate(100.0%);
   backdrop-filter: blur(2px) brightness(100.0%) saturate(100.0%);
