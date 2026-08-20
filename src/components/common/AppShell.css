@@ -13,6 +13,13 @@
   border: 3px solid rgba(0, 0, 0, 1.0);
   box-sizing: border-box;
 }
+.app-shell--chat {
+  background: linear-gradient(
+    180deg,
+    #f7f6f4 0%,
+    #f4dcf5 100%
+  );
+}
 
 .app-shell-splash {
   background: linear-gradient(
