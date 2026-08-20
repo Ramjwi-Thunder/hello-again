@@ -26,14 +26,37 @@ function SettingsPage({ onEditingChange }) {
     email: 'abc1234@gmail.com',
   });
 
+
+  const [showCustomDurationInput, setShowCustomDurationInput] = React.useState(false);
+  const [customDuration, setCustomDuration] = React.useState('');
+
   const [isEditingInfo, setIsEditingInfo] =
     React.useState(false);
 
-    React.useEffect(() => {
-        if (onEditingChange) {
-            onEditingChange(isEditingInfo);
-        }
-    }, [isEditingInfo, onEditingChange]);
+  // -----------------------------
+  // 현재 여정 수정
+  // -----------------------------
+
+  const [isEditingJourney, setIsEditingJourney] =
+    React.useState(false);
+
+  const [journeySettings, setJourneySettings] =
+    React.useState({
+      duration: 45,
+      paused: false,
+    });
+
+  const [editJourneySettings, setEditJourneySettings] =
+    React.useState({
+      duration: 45,
+      paused: false,
+    });
+
+  React.useEffect(() => {
+    if (onEditingChange) {
+      onEditingChange(isEditingInfo || isEditingJourney);
+    }
+  }, [isEditingInfo, isEditingJourney, onEditingChange]);
 
 
   // -----------------------------
@@ -101,6 +124,73 @@ function SettingsPage({ onEditingChange }) {
   const handleCancelEditInfo = () => {
     setEditInfo({ ...userInfo });
     setIsEditingInfo(false);
+  };
+
+  // -----------------------------
+  // 현재 여정 수정 시작
+  // -----------------------------
+
+  const handleEditJourney = () => {
+    setEditJourneySettings({ ...journeySettings });
+    setIsEditingJourney(true);
+  };
+
+  const handleJourneyDurationChange = (duration) => {
+    setEditJourneySettings((prev) => ({
+      ...prev,
+      duration,
+      paused: false,
+    }));
+  };
+
+  const handleJourneyPauseChange = () => {
+    setEditJourneySettings((prev) => ({
+      ...prev,
+      paused: !prev.paused,
+    }));
+  };
+
+  const handleSaveJourney = () => {
+    setJourneySettings({ ...editJourneySettings });
+    setIsEditingJourney(false);
+    setShowCustomDurationInput(false);
+    setCustomDuration('');
+  };
+
+  const handleCancelJourneyEdit = () => {
+    setEditJourneySettings({ ...journeySettings });
+    setIsEditingJourney(false);
+    setShowCustomDurationInput(false);
+    setCustomDuration('');
+  };
+
+  const getJourneyEndDate = (duration) => {
+    const startDate = new Date(2026, 7, 7);
+    startDate.setDate(startDate.getDate() + Number(duration));
+
+    const year = startDate.getFullYear();
+    const month = String(startDate.getMonth() + 1).padStart(2, '0');
+    const day = String(startDate.getDate()).padStart(2, '0');
+
+    return `${year}.${month}.${day}.`;
+  };
+
+  const getJourneyProgress = (duration) => {
+    const startDate = new Date(2026, 7, 7);
+    const today = new Date();
+
+    startDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    const elapsedDays = Math.floor(
+      (today - startDate) / (1000 * 60 * 60 * 24)
+    );
+
+    const progress = Math.round(
+      (elapsedDays / Number(duration)) * 100
+    );
+
+    return Math.min(100, Math.max(0, progress));
   };
 
 
@@ -244,20 +334,6 @@ function SettingsPage({ onEditingChange }) {
 
           </div>
 
-
-          <div className="settings-menu">
-
-            <span>특별한 날 알림</span>
-
-            <button
-              type="button"
-              className="settings-toggle active"
-              aria-label="특별한 날 알림"
-            >
-              <span />
-            </button>
-
-          </div>
 
         </section>
 
@@ -729,21 +805,508 @@ function SettingsPage({ onEditingChange }) {
 
   if (view === 'journey') {
 
+    // -----------------------------
+    // 현재 여정 수정 화면
+    // -----------------------------
+
+    if (isEditingJourney) {
+      return (
+        <div
+          className="settings-subpage"
+          style={{
+            position: 'relative',
+            minHeight: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          <header className="settings-sub-header">
+            <button
+              type="button"
+              className="settings-back"
+              onClick={handleCancelJourneyEdit}
+              aria-label="뒤로가기"
+            >
+              ‹
+            </button>
+
+            <h1 aria-hidden="true"></h1>
+
+            <div className="settings-header-action-placeholder" />
+          </header>
+
+          <div
+            style={{
+              padding: '24px 24px 110px',
+              boxSizing: 'border-box',
+            }}
+          >
+            <section>
+              <h2
+                style={{
+                  margin: '0 0 6px',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                }}
+              >
+                애도 기간을 설정해주세요.
+              </h2>
+
+              <p
+                style={{
+                  margin: '0 0 18px',
+                  fontSize: '13px',
+                  lineHeight: 1.5,
+                  color: '#999',
+                }}
+              >
+                선택한 기간에 맞춰 홈 화면의 기억의 여정 진행률이
+                조정돼요.
+              </p>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '10px',
+                }}
+              >
+                {[
+                  ['30', 30, '마음이 조금 정리됐다면'],
+                  ['45', 45, '추천'],
+                  ['60', 60, '아직 시간이 필요하다면'],
+                ].map(([label, duration, description]) => (
+                  <button
+                    key={duration}
+                    type="button"
+                    onClick={() =>
+                      handleJourneyDurationChange(duration)
+                    }
+                    style={{
+                      position: 'relative',
+                      height: '94px',
+                      padding: '16px',
+                      textAlign: 'left',
+                      borderRadius: '12px',
+                      border:
+                        editJourneySettings.duration === duration
+                          ? '2px solid #8888ff'
+                          : '1px solid #eee',
+                      background:
+                        editJourneySettings.duration === duration
+                          ? '#fff'
+                          : '#f7f7f7',
+                      color: '#666',
+                    }}
+                  >
+                    <strong
+                      style={{
+                        display: 'block',
+                        fontSize: '16px',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      {label}일
+                    </strong>
+
+                    <span
+                      style={{
+                        fontSize: '12px',
+                        color: '#a5afc0',
+                      }}
+                    >
+                      {description}
+                    </span>
+
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: '14px',
+                        right: '14px',
+                        width: '22px',
+                        height: '22px',
+                        borderRadius: '50%',
+                        background:
+                          editJourneySettings.duration === duration
+                            ? '#8888ff'
+                            : '#e5e5e5',
+                        color: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                      }}
+                    >
+                      ✓
+                    </span>
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const isCustom =
+                      ![30, 45, 60].includes(editJourneySettings.duration);
+
+                    setCustomDuration(
+                      isCustom
+                        ? String(editJourneySettings.duration)
+                        : ''
+                    );
+                    setShowCustomDurationInput(true);
+                  }}
+
+                  style={{
+                    position: 'relative',
+                    height: '94px',
+                    padding: '16px',
+                    textAlign: 'left',
+                    borderRadius: '12px',
+                    border:
+                      ![30, 45, 60].includes(editJourneySettings.duration)
+                        ? '2px solid #8888ff'
+                        : '1px solid #eee',
+                    background:
+                      ![30, 45, 60].includes(editJourneySettings.duration)
+                        ? '#fff'
+                        : '#f7f7f7',
+                    color: '#666',
+                  }}
+                >
+                  <strong
+                    style={{
+                      display: 'block',
+                      fontSize: '16px',
+                      marginBottom: '10px',
+                    }}
+                  >
+                    {[30, 45, 60].includes(editJourneySettings.duration)
+                      ? '직접 설정'
+                      : `${editJourneySettings.duration}일`}
+                  </strong>
+
+                  <span
+                    style={{
+                      fontSize: '12px',
+                      color: '#a5afc0',
+                    }}
+                  >
+                    {[30, 45, 60].includes(editJourneySettings.duration)
+                      ? '일수 입력'
+                      : '직접 설정됨'}
+                  </span>
+
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '14px',
+                      right: '14px',
+                      width: '22px',
+                      height: '22px',
+                      borderRadius: '50%',
+                      background:
+                        ![30, 45, 60].includes(editJourneySettings.duration)
+                          ? '#8888ff'
+                          : '#e5e5e5',
+                      color: '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '12px',
+                    }}
+                  >
+                    ✓
+                  </span>
+                </button>
+              </div>
+            </section>
+
+            <section style={{ marginTop: '36px' }}>
+              <h2
+                style={{
+                  margin: '0 0 6px',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                }}
+              >
+                혹시 잠시 쉬어가고 싶으신가요?
+              </h2>
+
+              <p
+                style={{
+                  margin: '0 0 18px',
+                  fontSize: '13px',
+                  lineHeight: 1.5,
+                  color: '#999',
+                }}
+              >
+                일시 중지하면 대화는 잠시 멈추지만 남은 기간은 그대로
+                보관돼요. 준비되면 언제든 다시 시작할 수 있어요.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleJourneyPauseChange}
+                style={{
+                  position: 'relative',
+                  width: 'calc(50% - 5px)',
+                  height: '94px',
+                  padding: '16px',
+                  textAlign: 'left',
+                  borderRadius: '12px',
+                  border: editJourneySettings.paused
+                    ? '2px solid #8888ff'
+                    : '1px solid #eee',
+                  background: editJourneySettings.paused
+                    ? '#fff'
+                    : '#f7f7f7',
+                  color: '#666',
+                }}
+              >
+                <strong
+                  style={{
+                    display: 'block',
+                    fontSize: '16px',
+                    marginBottom: '10px',
+                  }}
+                >
+                  일시 중지
+                </strong>
+
+                <span
+                  style={{
+                    fontSize: '12px',
+                    color: '#a5afc0',
+                  }}
+                >
+                  잠시 쉬어가도 괜찮아요
+                </span>
+
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '14px',
+                    right: '14px',
+                    width: '22px',
+                    height: '22px',
+                    borderRadius: '50%',
+                    background: editJourneySettings.paused
+                      ? '#8888ff'
+                      : '#e5e5e5',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                  }}
+                >
+                  ✓
+                </span>
+              </button>
+            </section>
+          </div>
+
+          <div
+            style={{
+              position: 'absolute',
+              left: '16px',
+              right: '16px',
+              bottom: '16px',
+              display: 'flex',
+              gap: '14px',
+              zIndex: 20,
+            }}
+          >
+            <button
+              type="button"
+              onClick={handleCancelJourneyEdit}
+              style={{
+                flex: 1,
+                height: '52px',
+                border: 'none',
+                borderRadius: '12px',
+                background: '#f5f5f5',
+                fontSize: '16px',
+                fontWeight: 600,
+              }}
+            >
+              취소
+            </button>
+
+            <button
+              type="button"
+              onClick={handleSaveJourney}
+              style={{
+                flex: 1,
+                height: '52px',
+                border: 'none',
+                borderRadius: '12px',
+                background: '#8888ff',
+                color: '#fff',
+                fontSize: '16px',
+                fontWeight: 600,
+              }}
+            >
+              수정완료
+            </button>
+          </div>
+
+          {showCustomDurationInput && (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 100,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px',
+                boxSizing: 'border-box',
+                background: 'rgba(0, 0, 0, 0.35)',
+                borderRadius: 'inherit',
+              }}
+            >
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: '320px',
+                  padding: '22px 20px 18px',
+                  boxSizing: 'border-box',
+                  background: '#fff',
+                  borderRadius: '16px',
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.15)',
+                }}
+              >
+                <h3
+                  style={{
+                    margin: '0 0 8px',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                  }}
+                >
+                  애도 기간을 설정해주세요.
+                </h3>
+
+                <p
+                  style={{
+                    margin: '0 0 14px',
+                    fontSize: '13px',
+                    lineHeight: 1.5,
+                    color: '#999',
+                  }}
+                >
+                  원하는 기간을 일수로 입력해주세요.
+                </p>
+
+                <input
+                  type="number"
+                  min="1"
+                  value={customDuration}
+                  onChange={(e) => setCustomDuration(e.target.value)}
+                  placeholder="예: 90"
+                  autoFocus
+                  style={{
+                    width: '100%',
+                    height: '48px',
+                    padding: '0 14px',
+                    boxSizing: 'border-box',
+                    border: '1px solid #ddd',
+                    borderRadius: '10px',
+                    fontSize: '15px',
+                    outline: 'none',
+                  }}
+                />
+
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '10px',
+                    marginTop: '14px',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCustomDurationInput(false);
+                      setCustomDuration('');
+                    }}
+                    style={{
+                      flex: 1,
+                      height: '46px',
+                      border: 'none',
+                      borderRadius: '10px',
+                      background: '#f5f5f5',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    취소
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const days = Number(customDuration);
+
+                      if (!Number.isInteger(days) || days <= 0) {
+                        return;
+                      }
+
+                      handleJourneyDurationChange(days);
+                      setShowCustomDurationInput(false);
+                      setCustomDuration('');
+                    }}
+                    style={{
+                      flex: 1,
+                      height: '46px',
+                      border: 'none',
+                      borderRadius: '10px',
+                      background: '#8888ff',
+                      color: '#fff',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // -----------------------------
+    // 현재 여정 조회 화면
+    // -----------------------------
+
     return (
       <div className="settings-subpage">
+        <header className="settings-sub-header">
+          <button
+            type="button"
+            className="settings-back"
+            onClick={() => setView('main')}
+            aria-label="뒤로가기"
+          >
+            ‹
+          </button>
 
-        <SubHeader
-          title="현재 여정"
-          onBack={() =>
-            setView('main')
-          }
-        />
+          <h1>현재 여정</h1>
+
+          <button
+            type="button"
+            className="settings-header-action"
+            onClick={handleEditJourney}
+          >
+            수정
+          </button>
+        </header>
 
         <div className="settings-detail">
-
           <DetailRow
             label="상태"
-            value="진행중"
+            value={journeySettings.paused ? '일시 중지' : '진행중'}
           />
 
           <DetailRow
@@ -758,19 +1321,18 @@ function SettingsPage({ onEditingChange }) {
 
           <DetailRow
             label="종료일"
-            value="2026.09.06."
+            value={getJourneyEndDate(journeySettings.duration)}
           />
 
           <div className="settings-progress-row">
-
             <span>진행률</span>
-
-            <strong>27%</strong>
-
+            <strong>
+              {journeySettings.paused
+                ? '일시 중지'
+                : `${getJourneyProgress(journeySettings.duration)}%`}
+            </strong>
           </div>
-
         </div>
-
       </div>
     );
   }
