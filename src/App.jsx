@@ -59,11 +59,6 @@ const HistoryPage = () => (
   <PlaceholderPage title="기록 페이지" />
 );
 
-const ChatPage = () => (
-  <PlaceholderPage title="대화 페이지" />
-);
-
-
 // -----------------------------
 // 페이지 목록
 // -----------------------------
