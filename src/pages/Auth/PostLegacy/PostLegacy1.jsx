@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import TopBar from "../../../components/common/TopBar";
-import { Input as TextInput } from "../../../components/common/InputBox/InputBox_text";
-import { Input as SelectInput } from "../../../components/common/Select";
 import SignupStartButton from "../../../components/common/Button/SignupStartButton";
 import { supabase } from "../../../lib/supabase";
 import "./PostLegacy1.css";
 
 const PostLegacy1 = ({ onRegistrationNext, onRegistrationBack }) => {
   const [name, setName] = useState("");
-  const [relationship, setRelationship] = useState("");
   const [nickname, setNickname] = useState("");
-  const [gender, setGender] = useState("");
   const [birthDate, setBirthDate] = useState("");
+  const [gender, setGender] = useState("");
+  const [relationship, setRelationship] = useState("");
   const [deathDate, setDeathDate] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleNext = async () => {
     // 필수값 확인
-    if (!name || !relationship || !birthDate || !deathDate) {
+    if (!name || !birthDate || !gender || !relationship || !deathDate) {
       alert("필수 정보를 입력해주세요.");
       return;
     }
@@ -48,8 +46,10 @@ const PostLegacy1 = ({ onRegistrationNext, onRegistrationBack }) => {
           {
             user_id: user.id,
             name: name,
+            nickname: nickname || null,
             birth_date: birthDate,
             death_date: deathDate,
+            gender: gender,
             relationship: relationship,
             status: "active",
           },
@@ -77,79 +77,147 @@ const PostLegacy1 = ({ onRegistrationNext, onRegistrationBack }) => {
 
   return (
     <div className="ver">
+      {/* 상단바 */}
       <TopBar
         title="사후 등록"
         onBackClick={onRegistrationBack}
       />
 
-      <main className="legacy-screen">
-        <h2 className="legacy-screen__title">
-          기본 정보
-        </h2>
+      {/* 기본 정보 */}
+      <div className="legacy-info">
+        <h2 className="legacy-info__title">기본 정보</h2>
 
-        <p className="legacy-screen__subtitle">
+        <p className="legacy-info__subtitle">
           기억하고 싶은 분을 입력해주세요.
         </p>
+      </div>
 
-        <section className="legacy-screen__fields">
-          {/* 이름 */}
-          <TextInput
-            inputPlaceholder="이름"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+      {/* 이름 */}
+      <div className="legacy-field legacy-field--name">
+        <label className="legacy-field__label">이름</label>
 
-          {/* 관계 */}
-          <SelectInput
-            inputPlaceholder="관계"
-            value={relationship}
-            onChange={(e) => setRelationship(e.target.value)}
-            options={[
-              { value: "parent", label: "부모" },
-              { value: "child", label: "자녀" },
-              { value: "spouse", label: "배우자" },
-              { value: "sibling", label: "형제·자매" },
-              { value: "friend", label: "친구" },
-              { value: "other", label: "기타" },
-            ]}
-          />
+        <input
+          className="legacy-input"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
 
-          {/* 별명 */}
-          <TextInput
-            inputPlaceholder="별명 (선택사항)"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-          />
+      {/* 별명 */}
+      <div className="legacy-field legacy-field--nickname">
+        <label className="legacy-field__label">
+          별명 (선택사항)
+        </label>
 
-          {/* 성별 */}
-          <SelectInput
-            inputPlaceholder="성별"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-            options={[
-              { value: "male", label: "남성" },
-              { value: "female", label: "여성" },
-            ]}
-          />
+        <input
+          className="legacy-input"
+          type="text"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+        />
+      </div>
 
-          {/* 생년월일 */}
-          <TextInput
-            inputPlaceholder="생년월일"
+      {/* 생년월일 */}
+      <div className="legacy-field legacy-field--birth">
+        <label className="legacy-field__label">생년월일</label>
+
+        <div className="legacy-date-wrapper">
+          <input
+            className={`legacy-input legacy-date-input ${
+              birthDate ? "has-value" : ""
+            }`}
             type="date"
             value={birthDate}
             onChange={(e) => setBirthDate(e.target.value)}
           />
 
-          {/* 별세일 */}
-          <TextInput
-            inputPlaceholder="별세일"
+          {!birthDate && (
+            <span className="legacy-date-placeholder">
+              선택
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* 성별 */}
+      <div className="legacy-field legacy-field--gender">
+        <label className="legacy-field__label">성별</label>
+
+        <div className="gender-buttons">
+          <button
+            type="button"
+            className={`gender-button ${
+              gender === "male" ? "selected" : ""
+            }`}
+            onClick={() => setGender("male")}
+          >
+            남성
+          </button>
+
+          <button
+            type="button"
+            className={`gender-button ${
+              gender === "female" ? "selected" : ""
+            }`}
+            onClick={() => setGender("female")}
+          >
+            여성
+          </button>
+        </div>
+      </div>
+
+      {/* 관계 */}
+      <div className="legacy-field legacy-field--relationship">
+        <label className="legacy-field__label">관계</label>
+
+        <div className="legacy-select-wrapper">
+          <select
+            className={`legacy-select ${
+              relationship ? "has-value" : ""
+            }`}
+            value={relationship}
+            onChange={(e) => setRelationship(e.target.value)}
+          >
+            <option value="" disabled>
+              선택
+            </option>
+
+            <option value="parent">부모</option>
+            <option value="child">자녀</option>
+            <option value="spouse">배우자</option>
+            <option value="sibling">형제·자매</option>
+            <option value="friend">친구</option>
+            <option value="other">기타</option>
+          </select>
+
+          <span className="select-arrow" />
+        </div>
+      </div>
+
+      {/* 별세일 */}
+      <div className="legacy-field legacy-field--death">
+        <label className="legacy-field__label">별세일</label>
+
+        <div className="legacy-date-wrapper">
+          <input
+            className={`legacy-input legacy-date-input ${
+              deathDate ? "has-value" : ""
+            }`}
             type="date"
             value={deathDate}
             onChange={(e) => setDeathDate(e.target.value)}
           />
-        </section>
-      </main>
 
+          {!deathDate && (
+            <span className="legacy-date-placeholder">
+              선택
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* 다음 버튼 */}
       <div className="legacy-screen__footer">
         <SignupStartButton
           text={isLoading ? "저장 중..." : "다음"}
