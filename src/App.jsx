@@ -26,7 +26,15 @@ import PostLegacy3 from './pages/Auth/PostLegacy/PostLegacy3';
 import HomePage from './pages/Home/HomePage';
 import MourningPeriodPage from './pages/Auth/MourningPeriod/PeriodPage';
 
+// ⭐ 설정 페이지
+import SettingsPage from './pages/Settings/SettingsPage';
+
 import ArchiveUpload from './pages/Archive/ArchiveUpload';
+
+
+// -----------------------------
+// 임시 페이지
+// -----------------------------
 
 const PlaceholderPage = ({ title }) => (
   <div
@@ -54,9 +62,10 @@ const ChatPage = () => (
   <PlaceholderPage title="대화 페이지" />
 );
 
-const SettingsPage = () => (
-  <PlaceholderPage title="설정 페이지" />
-);
+
+// -----------------------------
+// 페이지 목록
+// -----------------------------
 
 const pages = [
   {
@@ -65,96 +74,112 @@ const pages = [
     title: '홈',
     showTopBar: false,
   },
+
   {
     key: 'registration-main',
     component: RegistrationMain,
     title: '등록 메인',
     showTopBar: false,
   },
+
   {
     key: 'history',
     component: HistoryPage,
     title: '기록',
     showTopBar: true,
   },
+
   {
     key: 'chat',
     component: ChatPage,
     title: '대화',
     showTopBar: true,
   },
+
   {
     key: 'archive',
     component: ArchivePage,
     title: '기억 보관함',
     showTopBar: true,
   },
+
   {
     key: 'settings',
     component: SettingsPage,
     title: '설정',
-    showTopBar: true,
+    showTopBar: false,
   },
+
   {
     key: 'signup',
     component: SignUpPage,
     title: '',
     showTopBar: true,
   },
+
   {
     key: 'pre-1',
     component: PreLegacy1,
     title: '생전 등록',
     showTopBar: false,
   },
+
   {
     key: 'pre-2',
     component: PreLegacy2,
     title: '생전 등록',
     showTopBar: false,
   },
+
   {
     key: 'pre-3',
     component: PreLegacy3,
     title: '생전 등록',
     showTopBar: false,
   },
+
   {
     key: 'post-1',
     component: PostLegacy1,
     title: '사후 등록',
     showTopBar: false,
   },
+
   {
     key: 'post-2',
     component: PostLegacy2,
     title: '사후 등록',
     showTopBar: false,
   },
+
   {
     key: 'post-3',
     component: PostLegacy3,
     title: '사후 등록',
     showTopBar: false,
   },
+
   {
     key: 'mourning-period',
     component: MourningPeriodPage,
     title: '애도 기간',
     showTopBar: false,
   },
+
   {
     key: 'terms-service',
     component: TermsServicePage,
     title: '서비스 이용약관 동의',
     showTopBar: false,
   },
+
   {
     key: 'terms-privacy',
     component: TermsPrivacyPage,
     title: '개인정보 수집 및 이용 안내',
     showTopBar: false,
   },
+
   {
     key: 'terms-sensitive',
     component: TermsSensitivePage,
@@ -163,9 +188,20 @@ const pages = [
   },
 ];
 
+
 const SHOW_SPLASH = true;
 
+
+// -----------------------------
+// App
+// -----------------------------
+
 function App() {
+
+  // -----------------------------
+  // 상태
+  // -----------------------------
+
   const [activeTab, setActiveTab] = useState(
     SHOW_SPLASH ? 'splash' : 'auth'
   );
@@ -173,20 +209,37 @@ function App() {
   const [isArchiveUploading, setIsArchiveUploading] =
     useState(false);
 
+  // ⭐ 설정 - 내 정보 수정 화면 여부
+  const [isSettingsEditing, setIsSettingsEditing] =
+    useState(false);
+
+  // 등록 방식
   const [registrationMode, setRegistrationMode] =
     useState('after');
 
   // 고인 ID
-  const [memorialId, setMemorialId] = useState(null);
+  const [memorialId, setMemorialId] =
+    useState(null);
 
+  // 약관 동의
   const [agreements, setAgreements] = useState({
     termsOfService: false,
     privacyPolicy: false,
     sensitiveInfo: false,
   });
 
+
+  // -----------------------------
+  // 약관 동의 여부
+  // -----------------------------
+
   const allAgreementsAccepted =
     Object.values(agreements).every(Boolean);
+
+
+  // -----------------------------
+  // 실제 보여줄 탭
+  // -----------------------------
 
   const effectiveTab =
     activeTab === 'registration-main' &&
@@ -194,10 +247,24 @@ function App() {
       ? 'signup'
       : activeTab;
 
+
+  // -----------------------------
+  // 탭 변경
+  // -----------------------------
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+
     setIsArchiveUploading(false);
+
+    // 다른 페이지로 이동하면 설정 수정 상태도 초기화
+    setIsSettingsEditing(false);
   };
+
+
+  // -----------------------------
+  // 홈에서 다른 페이지 이동
+  // -----------------------------
 
   const handleNavigation = (targetView) => {
     if (
@@ -208,9 +275,19 @@ function App() {
     }
   };
 
+
+  // -----------------------------
+  // 약관 열기
+  // -----------------------------
+
   const handleOpenTerms = (targetView) => {
     setActiveTab(targetView);
   };
+
+
+  // -----------------------------
+  // 약관 동의
+  // -----------------------------
 
   const handleAcceptTerms = (termKey) => {
     setAgreements((prev) => ({
@@ -221,6 +298,11 @@ function App() {
     setActiveTab('signup');
   };
 
+
+  // -----------------------------
+  // 등록 메인 시작
+  // -----------------------------
+
   const handleStartRegistrationMain = () => {
     if (allAgreementsAccepted) {
       setActiveTab('registration-main');
@@ -229,6 +311,11 @@ function App() {
 
     setActiveTab('signup');
   };
+
+
+  // -----------------------------
+  // 등록 플로우 시작
+  // -----------------------------
 
   const handleStartRegistrationFlow = (mode) => {
     setRegistrationMode(mode);
@@ -240,13 +327,20 @@ function App() {
     );
   };
 
+
+  // -----------------------------
+  // 등록 단계 이동
+  // -----------------------------
+
   const handleRegistrationStep = (direction) => {
+
     const flow =
       registrationMode === 'before'
         ? ['pre-1', 'pre-2', 'pre-3']
         : ['post-1', 'post-2', 'post-3'];
 
-    const currentIndex = flow.indexOf(activeTab);
+    const currentIndex =
+      flow.indexOf(activeTab);
 
     if (currentIndex === -1) {
       return;
@@ -257,6 +351,7 @@ function App() {
         ? currentIndex + 1
         : currentIndex - 1;
 
+
     if (
       nextIndex >= 0 &&
       nextIndex < flow.length
@@ -264,6 +359,7 @@ function App() {
       setActiveTab(flow[nextIndex]);
       return;
     }
+
 
     if (
       direction === 'next' &&
@@ -273,6 +369,7 @@ function App() {
       return;
     }
 
+
     if (
       direction === 'back' &&
       currentIndex === 0
@@ -280,6 +377,7 @@ function App() {
       setActiveTab('registration-main');
     }
   };
+
 
   // -----------------------------
   // 스플래시
@@ -301,6 +399,7 @@ function App() {
     );
   }
 
+
   // -----------------------------
   // 온보딩
   // -----------------------------
@@ -320,6 +419,7 @@ function App() {
       </AppShell>
     );
   }
+
 
   // -----------------------------
   // 로그인
@@ -341,6 +441,7 @@ function App() {
     );
   }
 
+
   // -----------------------------
   // 등록 메인
   // -----------------------------
@@ -360,6 +461,11 @@ function App() {
     );
   }
 
+
+  // -----------------------------
+  // 현재 페이지
+  // -----------------------------
+
   const currentPage =
     pages.find(
       (page) => page.key === effectiveTab
@@ -368,16 +474,33 @@ function App() {
   const PageComponent =
     currentPage.component;
 
+
+  // -----------------------------
+  // 보관함 업로드
+  // -----------------------------
+
   const isUploading =
     effectiveTab === 'archive' &&
     isArchiveUploading;
+
+
+  // -----------------------------
+  // 상단 제목
+  // -----------------------------
 
   const pageTitle = isUploading
     ? '업로드'
     : currentPage.title;
 
+
+  // -----------------------------
+  // 하단 네비게이션
+  // -----------------------------
+
+  // ⭐ 설정에서 '내 정보 수정' 화면이면 숨김
   const showBottomNav =
     !isUploading &&
+    !isSettingsEditing &&
     effectiveTab !== 'registration-main' &&
     effectiveTab !== 'signup' &&
     !effectiveTab.startsWith('terms-') &&
@@ -385,19 +508,39 @@ function App() {
     !effectiveTab.startsWith('post-') &&
     effectiveTab !== 'mourning-period';
 
+
+  // -----------------------------
+  // 뒤로가기
+  // -----------------------------
+
   const handleBackClick =
     effectiveTab === 'signup'
-      ? () => setActiveTab('auth')
+
+      ? () =>
+          setActiveTab('auth')
+
       : effectiveTab.startsWith('pre-') ||
-          effectiveTab.startsWith('post-')
-        ? () =>
-            handleRegistrationStep('back')
-        : effectiveTab.startsWith('terms-')
-          ? () => setActiveTab('signup')
-          : isUploading
-            ? () =>
-                setIsArchiveUploading(false)
-            : undefined;
+        effectiveTab.startsWith('post-')
+
+      ? () =>
+          handleRegistrationStep('back')
+
+      : effectiveTab.startsWith('terms-')
+
+      ? () =>
+          setActiveTab('signup')
+
+      : isUploading
+
+      ? () =>
+          setIsArchiveUploading(false)
+
+      : undefined;
+
+
+  // -----------------------------
+  // 화면
+  // -----------------------------
 
   return (
     <AppShell
@@ -407,104 +550,182 @@ function App() {
       showTopBar={currentPage.showTopBar}
       bottomNav={showBottomNav}
       onBackClick={handleBackClick}
+
       isAuth={
         effectiveTab === 'auth' ||
         effectiveTab === 'signup'
       }
-      isTerms={effectiveTab.startsWith('terms-')}
+
+      isTerms={
+        effectiveTab.startsWith('terms-')
+      }
     >
+
       <div className="page-scroll-area">
+
+        {/* 보관함 업로드 */}
         {isUploading ? (
+
           <ArchiveUpload
             onCancel={() =>
               setIsArchiveUploading(false)
             }
+
             onSuccess={() =>
               setIsArchiveUploading(false)
             }
           />
+
         ) : (
+
           <PageComponent
+
             title={currentPage.title}
-            isUploading={isArchiveUploading}
+
+            isUploading={
+              isArchiveUploading
+            }
+
             setIsUploading={
               setIsArchiveUploading
             }
-            memorialId={memorialId}
-            onBackClick={handleBackClick}
-            agreements={agreements}
-            setAgreements={setAgreements}
 
+            memorialId={
+              memorialId
+            }
+
+            onBackClick={
+              handleBackClick
+            }
+
+            agreements={
+              agreements
+            }
+
+            setAgreements={
+              setAgreements
+            }
+
+
+            // ⭐ 설정 페이지
+            // 내 정보 수정 여부를 App에 전달
+            onEditingChange={
+              effectiveTab === 'settings'
+                ? setIsSettingsEditing
+                : undefined
+            }
+
+
+            // 회원가입 → 등록 메인
             onStartRegistrationMain={
               effectiveTab === 'signup'
                 ? handleStartRegistrationMain
                 : undefined
             }
 
+
+            // 약관 동의
             onAcceptTerms={
-              effectiveTab === 'terms-service'
+
+              effectiveTab ===
+              'terms-service'
+
                 ? () =>
                     handleAcceptTerms(
                       'termsOfService'
                     )
-                : effectiveTab === 'terms-privacy'
-                  ? () =>
-                      handleAcceptTerms(
-                        'privacyPolicy'
-                      )
-                  : effectiveTab ===
-                      'terms-sensitive'
-                    ? () =>
-                        handleAcceptTerms(
-                          'sensitiveInfo'
-                        )
-                    : undefined
+
+                : effectiveTab ===
+                  'terms-privacy'
+
+                ? () =>
+                    handleAcceptTerms(
+                      'privacyPolicy'
+                    )
+
+                : effectiveTab ===
+                  'terms-sensitive'
+
+                ? () =>
+                    handleAcceptTerms(
+                      'sensitiveInfo'
+                    )
+
+                : undefined
             }
 
+
+            // 대화
             onStartChat={() =>
               handleNavigation('chat')
             }
 
+
+            // 보관함
             onOpenArchive={() =>
               handleNavigation('archive')
             }
 
+
+            // 설정
             onGoToSettings={() =>
               handleNavigation('settings')
             }
 
+
+            // 기록
             onGoToHistory={() =>
               handleNavigation('history')
             }
 
-            onOpenTerms={handleOpenTerms}
 
-            // 등록 페이지 다음 버튼
+            // 약관
+            onOpenTerms={
+              handleOpenTerms
+            }
+
+
+            // 등록 페이지 다음
             onRegistrationNext={(data) => {
+
               if (data?.id) {
                 setMemorialId(data.id);
               }
 
-              // 한 번만 다음 단계로 이동
-              handleRegistrationStep('next');
+              handleRegistrationStep(
+                'next'
+              );
             }}
 
+
+            // 등록 페이지 뒤로
             onRegistrationBack={() =>
-              handleRegistrationStep('back')
+              handleRegistrationStep(
+                'back'
+              )
             }
 
+
+            // 등록 완료
             onRegistrationComplete={() =>
               setActiveTab('home')
             }
 
+
+            // 애도 기간 완료
             onMourningPeriodNext={() =>
               setActiveTab('home')
             }
+
           />
+
         )}
+
       </div>
+
     </AppShell>
   );
 }
+
 
 export default App;
