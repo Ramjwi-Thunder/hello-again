@@ -643,3 +643,8 @@
 
   color: #ffffff;
 }
+
+/* 고인 정보 페이지에서는 하단 네비가 보이지 않도록 */
+.deceased-fullscreen {
+  overflow-y: auto;
+}
