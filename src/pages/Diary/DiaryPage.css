@@ -64,7 +64,7 @@
 
 .diary-fab-button {
     position: absolute;
-    bottom: 24px;
+    bottom: 112px;
     right: 25px;
     width: 35px;
     height: 35px;
@@ -77,16 +77,6 @@
     justify-content: center;
     cursor: pointer;
     z-index: 50;
-    transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-.diary-fab-button:hover {
-    transform: scale(1.05);
-    background-color: #7a7cf0;
-}
-
-.diary-fab-button:active {
-    transform: scale(0.95);
 }
 
 .diary-fab-icon {

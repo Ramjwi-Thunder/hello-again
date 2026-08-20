@@ -5,8 +5,6 @@ import { supabase } from '../../lib/supabase';
 import DiarySearchBar from '../../components/diary/DiarySearchBar';
 import DiaryCategoryChips from '../../components/diary/DiaryCategoryChips';
 import DiaryListItem from '../../components/diary/DiaryListItem';
-import DiaryWriteModal from '../../components/diary/DiaryWriteModal';
-import DiaryDetailModal from '../../components/diary/DiaryDetailModal';
 
 import './DiaryPage.css';
 
@@ -57,12 +55,10 @@ const INITIAL_DIARY_ITEMS = [
     },
 ];
 
-function DiaryPage() {
+function DiaryPage({ onOpenWrite, onOpenDetail, addedItems = [] }) {
     const [items, setItems] = useState(INITIAL_DIARY_ITEMS);
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategory, setActiveCategory] = useState('전체');
-    const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
 
     const fetchDiaryItems = useCallback(async () => {
         try {
@@ -98,7 +94,7 @@ function DiaryPage() {
     }, [fetchDiaryItems]);
 
     const filteredItems = useMemo(() => {
-        return items.filter((item) => {
+        return [...addedItems, ...items].filter((item) => {
             const matchesCategory =
                 activeCategory === '전체' || item.category === activeCategory;
 
@@ -110,15 +106,7 @@ function DiaryPage() {
 
             return matchesCategory && matchesSearch;
         });
-    }, [items, activeCategory, searchTerm]);
-
-    const handleSaveNewItem = (newItem) => {
-        setItems((prev) => [newItem, ...prev]);
-    };
-
-    const handleDeleteItem = (itemId) => {
-        setItems((prev) => prev.filter((item) => item.id !== itemId));
-    };
+    }, [items, addedItems, activeCategory, searchTerm]);
 
     const handleClearSearch = () => {
         setSearchTerm('');
@@ -153,7 +141,7 @@ function DiaryPage() {
                             <DiaryListItem
                                 key={item.id}
                                 item={item}
-                                onClick={setSelectedItem}
+                                onClick={onOpenDetail}
                             />
                         ))}
                     </div>
@@ -171,7 +159,7 @@ function DiaryPage() {
             <button
                 type="button"
                 className="diary-fab-button"
-                onClick={() => setIsWriteModalOpen(true)}
+                onClick={onOpenWrite}
                 aria-label="새 기록 작성하기"
             >
                 <img
@@ -182,17 +170,6 @@ function DiaryPage() {
                 />
             </button>
 
-            <DiaryWriteModal
-                isOpen={isWriteModalOpen}
-                onClose={() => setIsWriteModalOpen(false)}
-                onSave={handleSaveNewItem}
-            />
-
-            <DiaryDetailModal
-                item={selectedItem}
-                onClose={() => setSelectedItem(null)}
-                onDelete={handleDeleteItem}
-            />
         </main>
     );
 }
