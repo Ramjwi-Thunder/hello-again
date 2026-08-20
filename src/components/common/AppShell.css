@@ -16,7 +16,15 @@
 .app-shell--chat {
   background: linear-gradient(
     180deg,
-    #f7f6f4 0%,
+    #ffffff 0%,
+    #f4dcf5 100%
+  );
+}
+
+.app-shell:has(.chat-page) {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
     #f4dcf5 100%
   );
 }
@@ -75,7 +83,9 @@
 }
 
 .app-shell-bottom {
-  flex-shrink: 0; /* 하단 네비게이션이 줄어들지 않도록 고정 */
+  position: relative;
+  flex-shrink: 0;
+  height: 74px;
 }
 
 .app-content .slick-slider,
