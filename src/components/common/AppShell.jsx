@@ -16,7 +16,7 @@ function AppShell({
   isAuth = false,
   isTerms = false,
 }) {
-  const shellClassName = `app-shell${activeTab === 'home' || activeTab === 'registration-main' ? ' app-shell-home' : ''}${activeTab === 'archive' ? ' app-shell--archive' : ''}${activeTab === 'auth' ? ' app-shell-auth' : ''}${isSplash ? ' app-shell-splash' : ''}${isAuth ? ' app-shell-auth' : ''}${isTerms ? ' app-shell-terms' : ''}`;
+    const shellClassName = `app-shell${activeTab === 'home' || activeTab === 'registration-main' ? ' app-shell-home' : ''}${activeTab === 'archive' ? ' app-shell--archive' : ''}${activeTab === 'history' || activeTab === 'diary' ? ' app-shell--diary' : ''}${activeTab === 'auth' ? ' app-shell-auth' : ''}${isSplash ? ' app-shell-splash' : ''}${isAuth ? ' app-shell-auth' : ''}${isTerms ? ' app-shell-terms' : ''}`;
 
   return (
     <div className={shellClassName}>

@@ -1,0 +1,50 @@
+.diary-category-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 6px;
+    align-items: center;
+    width: 100%;
+}
+
+.diary-category-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    padding: 6px 12px;
+    background-color: #f3f4f6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    box-sizing: border-box;
+}
+
+.diary-category-chip-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+.diary-category-chip.active {
+    background-color: #e5e7eb;
+}
+
+.diary-category-chip.active .diary-category-chip-label {
+    color: #090909;
+    font-weight: 600;
+}
+
+.diary-category-chip.inactive {
+    background-color: #f3f4f6;
+}
+
+.diary-category-chip.inactive .diary-category-chip-label {
+    color: #949494;
+    font-weight: 400;
+}
+
+.diary-category-chip:hover {
+    opacity: 0.9;
+}
